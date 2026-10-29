@@ -1,0 +1,193 @@
+const photo = (id: string, w = 1000) =>
+  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=85`;
+export const pictures = {
+  hero: photo("photo-1519741497674-611481863552", 1800),
+  rings: photo("photo-1512163143273-bde0e3cc7407"),
+  flowers: photo("photo-1525310072745-f49212b5ac6d"),
+  suit: photo("photo-1594938298603-c8148c4dae35"),
+  venue: photo("photo-1519167758481-83f550bb49b3"),
+  couple: photo("photo-1529333166437-7750a6dd5a70"),
+  dinner: photo("photo-1414235077428-338989a2e8c0"),
+};
+export const couples = [
+  {
+    name: "Léa & Thomas",
+    city: "Paris",
+    month: "Juin 2027",
+    img: photo("photo-1522673607200-164d1b6ce486", 500),
+  },
+  {
+    name: "Manon & Romain",
+    city: "Nice",
+    month: "Mai 2027",
+    img: photo("photo-1516589178581-6cd7833ae3b2", 500),
+  },
+  {
+    name: "Julie & Maxime",
+    city: "Provence",
+    month: "Août 2027",
+    img: photo("photo-1529636798458-92182e662485", 500),
+  },
+  {
+    name: "Chloé & Hugo",
+    city: "Bordeaux",
+    month: "Septembre 2027",
+    img: photo("photo-1511285560929-80b456fea0bc", 500),
+  },
+];
+export const offers = [
+  {
+    id: "monsieur",
+    name: "By Monsieur",
+    category: "Costumes",
+    city: "Paris",
+    image: pictures.suit,
+    desc: "Un costume qui vous ressemble, pour le jour qui vous rassemble.",
+    individual: "−15 % sur votre costume",
+    collective: "Jusqu’à −30 % avec un autre couple",
+    saving: 240,
+  },
+  {
+    id: "fleurs",
+    name: "Atelier Pivoine",
+    category: "Fleuristes",
+    city: "Paris",
+    image: pictures.flowers,
+    desc: "Des fleurs de saison, un peu de poésie et beaucoup d’amour.",
+    individual: "−10 % sur votre décoration",
+    collective: "−20 % à partir de 5 couples",
+    saving: 180,
+  },
+  {
+    id: "lieu",
+    name: "La Maison des oliviers",
+    category: "Lieux de réception",
+    city: "Provence",
+    image: pictures.venue,
+    desc: "Une parenthèse sous les oliviers pour célébrer votre histoire.",
+    individual: "−10 % sur la privatisation",
+    collective: "−15 % avec 3 couples",
+    saving: 600,
+  },
+  {
+    id: "photo",
+    name: "Les instants doux",
+    category: "Photographes",
+    city: "Nice",
+    image: pictures.hero,
+    desc: "Des images vivantes pour garder la beauté des petits instants.",
+    individual: "−10 % sur votre reportage",
+    collective: "−15 % avec un autre couple",
+    saving: 150,
+  },
+  {
+    id: "robe",
+    name: "Maison Éloïse",
+    category: "Robes de mariée",
+    city: "Paris",
+    image: couples[2].img,
+    desc: "Des matières délicates et une silhouette toute à vous.",
+    individual: "Retouches offertes",
+    collective: "−15 % à deux couples",
+    saving: 200,
+  },
+  {
+    id: "table",
+    name: "À notre table",
+    category: "Traiteurs",
+    city: "Bordeaux",
+    image: pictures.dinner,
+    desc: "Une cuisine généreuse pour les grandes tablées heureuses.",
+    individual: "−10 % sur le menu",
+    collective: "−15 % à 5 couples",
+    saving: 300,
+  },
+  {
+    id: "resto",
+    name: "Les heures heureuses",
+    category: "Restaurants",
+    city: "Paris",
+    image: pictures.dinner,
+    desc: "Un dîner à deux, juste pour le plaisir de se retrouver.",
+    individual: "−15 % sur le dîner",
+    collective: "−20 % à deux couples",
+    saving: 30,
+  },
+  {
+    id: "spa",
+    name: "Le refuge",
+    category: "Spas et expériences",
+    city: "Nice",
+    image: pictures.venue,
+    desc: "Une pause douce à partager, avant ou après le grand jour.",
+    individual: "−10 % sur le duo",
+    collective: "−20 % à 3 couples",
+    saving: 45,
+  },
+];
+type Witness = {
+  name: string;
+  mission: string;
+  planning: boolean;
+  budget: boolean;
+  party: boolean;
+};
+type Post = {
+  id: number;
+  author: string;
+  text: string;
+  likes: number;
+  liked: boolean;
+  comments: string[];
+};
+export type Data = {
+  members: string[];
+  conversations: Record<string, string[]>;
+  messages: string[];
+  done: string[];
+  favorites: string[];
+  joined: string[];
+  witnesses: Witness[];
+  posts: Post[];
+  budget: number;
+  expenses: { name: string; amount: number }[];
+  memories: string[];
+  answer: string;
+  date: string;
+  auto: boolean;
+  groups: string[];
+  chat: { role: string; text: string }[];
+};
+export const initial: Data = {
+  members: ["Sarah", "Julien"],
+  conversations: {},
+  messages: [
+    "J’ai hâte de te voir quand tu seras devant moi, juste avant la cérémonie. Je sais que tu vas pleurer.",
+    "Ce que j’aime le plus, c’est qu’on soit une équipe dans tout, même dans le stress. Avec toi, tout est plus simple.",
+  ],
+  done: [],
+  favorites: [],
+  joined: [],
+  witnesses: [],
+  posts: [
+    {
+      id: 1,
+      author: "Léa & Thomas",
+      text: "On a trouvé notre lieu ! Une petite maison entourée de nature… On a déjà hâte d’y être. Et vous, où en êtes-vous ? 🌿",
+      likes: 24,
+      liked: false,
+      comments: ["Manon : Cet endroit a l’air magique !"],
+    },
+  ],
+  budget: 20000,
+  expenses: [
+    { name: "Lieu de réception", amount: 4500 },
+    { name: "Photographe", amount: 1800 },
+  ],
+  memories: [],
+  answer: "",
+  date: "2027-04-17",
+  auto: false,
+  groups: [],
+  chat: [],
+};
