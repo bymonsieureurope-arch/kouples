@@ -1,7 +1,11 @@
 const photo = (id: string, w = 1000) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=85`;
 export const pictures = {
-  hero: photo("photo-1519741497674-611481863552", 1800),
+  hero: photo("photo-1511285560929-80b456fea0bc", 1800),
+  sarah: photo("photo-1534528741775-53994a69daeb", 300),
+  julien: photo("photo-1500648767791-00dcc994a43e", 300),
+  coach: photo("photo-1518611012118-696072aa579a", 700),
+  photographer: photo("photo-1544005313-94ddf0286df2", 700),
   rings: photo("photo-1512163143273-bde0e3cc7407"),
   flowers: photo("photo-1525310072745-f49212b5ac6d"),
   suit: photo("photo-1594938298603-c8148c4dae35"),
@@ -41,11 +45,39 @@ export const offers = [
     name: "By Monsieur",
     category: "Costumes",
     city: "Paris",
-    image: pictures.suit,
-    desc: "Un costume qui vous ressemble, pour le jour qui vous rassemble.",
+    image: pictures.julien,
+    specialty: "Costumes sur-mesure",
+    signature: "Hugo, co-fondateur",
+    desc: "Créer des tenues qui vous ressemblent vraiment, pour que vous vous sentiez vous, simplement en mieux.",
     individual: "−15 % sur votre costume",
-    collective: "Jusqu’à −30 % avec un autre couple",
+    collective: "−30 % par couple avec un autre couple",
     saving: 240,
+  },
+  {
+    id: "coach",
+    name: "Anaïs Coaching",
+    category: "Sport",
+    city: "Paris · En ligne",
+    image: pictures.coach,
+    specialty: "Coaching sportif mariage",
+    signature: "Anaïs",
+    desc: "Mon objectif : que vous vous sentiez le mieux possible dans votre corps pour profiter pleinement de cette période unique.",
+    individual: "−15 % sur votre programme",
+    collective: "−30 % par couple avec un autre couple",
+    saving: 90,
+  },
+  {
+    id: "lucie",
+    name: "Lucie Photographie",
+    category: "Photographes",
+    city: "Île-de-France · Provence",
+    image: pictures.photographer,
+    specialty: "Photographe de mariage",
+    signature: "Lucie",
+    desc: "Des photos naturelles, vraies et pleines d’émotion, pour revivre votre journée comme si vous y étiez encore.",
+    individual: "−15 % sur votre reportage",
+    collective: "−30 % par couple avec un autre couple",
+    saving: 450,
   },
   {
     id: "fleurs",
@@ -141,6 +173,7 @@ type Post = {
   comments: string[];
 };
 export type Data = {
+  savedPosts: number[];
   members: string[];
   conversations: Record<string, string[]>;
   messages: string[];
@@ -159,6 +192,7 @@ export type Data = {
   chat: { role: string; text: string }[];
 };
 export const initial: Data = {
+  savedPosts: [],
   members: ["Sarah", "Julien"],
   conversations: {},
   messages: [
@@ -173,7 +207,7 @@ export const initial: Data = {
     {
       id: 1,
       author: "Léa & Thomas",
-      text: "On a trouvé notre lieu ! Une petite maison entourée de nature… On a déjà hâte d’y être. Et vous, où en êtes-vous ? 🌿",
+      text: "On cherche des idées pour un dîner en extérieur ! Vous avez des recommandations ?",
       likes: 24,
       liked: false,
       comments: ["Manon : Cet endroit a l’air magique !"],

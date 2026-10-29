@@ -19,6 +19,11 @@ import {
   Bell,
   Leaf,
   CheckCheck,
+  PencilLine,
+  Clock3,
+  MapPin,
+  Star,
+  Bookmark,
 } from "lucide-react";
 import { initial, pictures, couples, offers, type Data } from "../lib/demo";
 const tabs = [
@@ -139,7 +144,7 @@ export default function App() {
           (new Date(data.date + "T00:00:00").getTime() - Date.now()) / 86400000,
         ),
       )
-    : 194;
+    : 184;
   const tasks = [
     "Choisir vos alliances",
     "Confirmer le traiteur",
@@ -183,7 +188,16 @@ export default function App() {
       <div className="section-heading">
         <div>
           {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-          <h2>{title}</h2>
+          <h2>
+            {title === "Vos mots du jour" ? (
+              <Heart className="section-icon" />
+            ) : title === "Votre prochaine action" ? (
+              <CalendarDays className="section-icon" />
+            ) : title === "La tribu des mariés" ? (
+              <Users className="section-icon" fill="currentColor" />
+            ) : null}
+            {title}
+          </h2>
         </div>
         {action}
       </div>
@@ -192,9 +206,33 @@ export default function App() {
   );
   const OfferCard = ({ offer: o }: { offer: (typeof offers)[number] }) => (
     <article className="offer-card">
-      <div className="offer-image">
-        <Photo src={o.image} alt={o.category} loading="lazy" />
-        <span className="image-label">OFFRE FICTIVE · DÉMO</span>
+      <div className="offer-main">
+        <div className="offer-image">
+          <Photo src={o.image} alt={o.category} loading="lazy" />
+        </div>
+        <div className="offer-body">
+          <h3>{o.name}</h3>
+          <p className="specialty">
+            {"specialty" in o ? String(o.specialty) : o.category}
+          </p>
+          <div className="provider-meta">
+            <span>
+              <Star size={13} fill="currentColor" /> 4,9{" "}
+              <span className="review-count">(avis démo)</span>
+            </span>
+            <span>
+              <MapPin size={13} />
+              {o.city}
+            </span>
+          </div>
+          <blockquote>
+            « {o.desc} »
+            <cite>— {"signature" in o ? String(o.signature) : "L’équipe"}</cite>
+          </blockquote>
+          <span className="provider-demo">
+            Prestataire, avis et offre fictifs · Démonstration
+          </span>
+        </div>
         <button
           className={
             "favorite " + (data.favorites.includes(o.id) ? "active" : "")
@@ -203,38 +241,50 @@ export default function App() {
           onClick={() => toggle("favorites", o.id)}
         >
           <Heart
-            size={18}
+            size={20}
             fill={data.favorites.includes(o.id) ? "currentColor" : "none"}
           />
         </button>
       </div>
-      <div className="offer-body">
-        <div className="meta">
-          {o.category} <span>• {o.city}</span>
-        </div>
-        <h3>{o.name}</h3>
-        <p>{o.desc}</p>
-        <small>★ 4,9 · Avis fictifs de démonstration</small>
-        <div className="offer-benefit">
-          <Tag size={16} />
-          {o.individual}
-        </div>
-        <p className="collective">{o.collective}</p>
-        <button
-          className="text-button"
-          onClick={() => {
-            toggle("joined", o.id);
-            setToast(
-              data.joined.includes(o.id)
-                ? "Participation annulée"
-                : "Participation enregistrée en démonstration",
-            );
-          }}
-        >
-          {data.joined.includes(o.id) ? "Quitter l’offre" : "Rejoindre l’offre"}
-          <ArrowUpRight size={17} />
-        </button>
-      </div>
+      <button
+        className={
+          "collective-band " + (data.joined.includes(o.id) ? "joined" : "")
+        }
+        aria-label={
+          (data.joined.includes(o.id)
+            ? "Quitter l’offre "
+            : "Rejoindre l’offre ") + o.name
+        }
+        onClick={() => {
+          toggle("joined", o.id);
+          setToast(
+            data.joined.includes(o.id)
+              ? "Participation annulée"
+              : "Participation enregistrée en démonstration",
+          );
+        }}
+      >
+        <Users className="collective-icon" size={32} fill="currentColor" />
+        <span>
+          <strong>
+            {o.collective.split(" avec")[0].split(" à partir")[0]}
+          </strong>
+          <small>
+            {data.joined.includes(o.id)
+              ? "Vous participez · toucher pour quitter"
+              : o.id === "fleurs"
+                ? "si cinq couples de la tribu se réunissent"
+                : "si vous prenez rendez-vous avec un autre couple de la tribu"}
+          </small>
+        </span>
+        <span className="offer-join">
+          {data.joined.includes(o.id) ? (
+            <Check size={22} />
+          ) : (
+            <ArrowRight size={22} />
+          )}
+        </span>
+      </button>
     </article>
   );
   const Messages = () => (
@@ -247,9 +297,18 @@ export default function App() {
             onClick={() => setModal("message" + i)}
           >
             <div className="note-author">
-              <span className="avatar">{i ? "J" : "S"}</span>
-              <b>{data.members[i]}</b>
-              <Heart size={15} />
+              <Photo
+                className="avatar member-photo"
+                src={i ? pictures.julien : pictures.sarah}
+                alt=""
+              />
+              <div>
+                <b>{data.members[i]}</b>
+                <small>{i ? "Ta réponse" : "Sa réponse"}</small>
+              </div>
+              <span className={"note-heart " + (i === 0 ? "loved" : "")}>
+                <Heart size={17} fill={i === 0 ? "currentColor" : "none"} />
+              </span>
             </div>
             <p>« {m} »</p>
             <span className="note-footer">
@@ -262,7 +321,7 @@ export default function App() {
         className="text-button centered"
         onClick={() => setModal("message0")}
       >
-        <Plus size={16} /> Écrire un nouveau message
+        <PencilLine size={17} /> Écrire un nouveau message
       </button>
     </>
   );
@@ -285,31 +344,57 @@ export default function App() {
             <Photo src={c.img} alt={c.name} />
             <h3>{c.name}</h3>
             <p>
-              {c.city} <span>· {c.month}</span>
+              <span>{c.month}</span>
+              <span>{c.city}</span>
             </p>
           </button>
         ))}
+      <button className="join-profile" onClick={() => go("Tribu")}>
+        <span>
+          <Plus size={24} />
+        </span>
+        <small>
+          Rejoindre
+          <br />
+          d’autres couples
+        </small>
+      </button>
     </div>
   );
   const Feed = () => (
     <div className="feed">
       {data.posts.map((p) => (
-        <article className="post" key={p.id}>
+        <article
+          className={"post " + (p.id === 1 ? "featured-post" : "")}
+          key={p.id}
+        >
           <div className="post-author">
-            <span className="avatar">{p.author.slice(0, 1)}</span>
+            <Photo
+              className="avatar"
+              src={p.id === 1 ? couples[0].img : pictures.sarah}
+              alt=""
+            />
             <div>
               <b>{p.author}</b>
-              <small>Dans la tribu · Démonstration</small>
+              <small>
+                {p.id === 1
+                  ? "Juin 2027 · Paris"
+                  : "Dans la tribu · Démonstration"}
+              </small>
             </div>
             <Leaf size={19} />
           </div>
           <p>{p.text}</p>
           {p.id === 1 && (
-            <Photo
-              className="post-photo"
-              src={pictures.venue}
-              alt="Un lieu de réception entouré de nature"
-            />
+            <button
+              className="post-gallery"
+              aria-label="Voir les inspirations de la discussion"
+              onClick={() => setModal("comment:" + p.id)}
+            >
+              <Photo src={pictures.dinner} alt="Inspiration dîner de mariage" />
+              <Photo src={pictures.venue} alt="Inspiration lieu de réception" />
+              <span>+3</span>
+            </button>
           )}
           <div className="post-actions">
             <button
@@ -332,10 +417,36 @@ export default function App() {
             </button>
             <button onClick={() => setModal("comment:" + p.id)}>
               <MessageCircle size={17} />
-              {p.comments.length} commentaire{p.comments.length > 1 ? "s" : ""}
+              <span>{p.comments.length}</span>
+              <span className="sr-only">
+                {" "}
+                commentaire{p.comments.length > 1 ? "s" : ""}
+              </span>
+            </button>
+            <button
+              aria-label="Sauvegarder cette publication"
+              className={
+                (data.savedPosts || []).includes(p.id) ? "saved-post" : ""
+              }
+              onClick={() =>
+                update({
+                  savedPosts: (data.savedPosts || []).includes(p.id)
+                    ? (data.savedPosts || []).filter((id) => id !== p.id)
+                    : [...(data.savedPosts || []), p.id],
+                })
+              }
+            >
+              <Bookmark
+                size={18}
+                fill={
+                  (data.savedPosts || []).includes(p.id)
+                    ? "currentColor"
+                    : "none"
+                }
+              />
             </button>
             <button onClick={() => setModal("comment:" + p.id)}>
-              Participer <ArrowUpRight size={16} />
+              Rejoindre la discussion <ArrowRight size={16} />
             </button>
           </div>
           {p.comments.map((c, i) => (
@@ -386,11 +497,9 @@ export default function App() {
           </button>
         </div>
       </aside>
-      <div className="app-shell">
+      <div className={"app-shell view-" + tab.toLowerCase()}>
         <header>
-          <div className="mobile-brand brand">
-            K<span>o</span>uples<span>.</span>
-          </div>
+          <div className="mobile-brand brand">Kouples.</div>
           <div className="breadcrumb">
             Votre espace <span>/</span> {tab}
           </div>
@@ -414,7 +523,7 @@ export default function App() {
               <i />
             </button>
             <button className="header-avatar" onClick={() => go("Couple")}>
-              S
+              <Photo src={pictures.julien} alt="Votre profil" />
             </button>
           </div>
         </header>
@@ -439,7 +548,7 @@ export default function App() {
                 ) : tab === "Tribu" ? (
                   "Votre tribu vous attend."
                 ) : (
-                  "De belles choses, à deux."
+                  "Les prestataires de la tribu"
                 )}
               </h1>
               <p>
@@ -451,7 +560,7 @@ export default function App() {
                       ? "Votre assistant pour avancer ensemble, en toute sérénité."
                       : tab === "Tribu"
                         ? "Les mêmes envies, les mêmes questions. Une aventure à partager."
-                        : "Des adresses choisies pour les grands jours et les petits plaisirs."}
+                        : "Des professionnels recommandés par d’autres couples, avec des avantages exclusifs."}
               </p>
             </div>
             {tab === "Accueil" && (
@@ -469,9 +578,7 @@ export default function App() {
                 />
                 <div className="hero-shade" />
                 <div className="hero-top">
-                  <span>
-                    <span className="live-dot" /> NOTRE GRAND JOUR
-                  </span>
+                  <span>VOTRE GRAND JOUR</span>
                   <button onClick={() => setModal("date")}>
                     <CalendarDays size={14} />
                     {new Date(data.date + "T12:00:00").toLocaleDateString(
@@ -483,16 +590,20 @@ export default function App() {
                 <div className="hero-content">
                   <div className="countdown">
                     J−{days}
-                    <span>avant le début du reste de votre vie</span>
+                    <span>
+                      Encore {days} jours pour
+                      <br />
+                      écrire votre histoire.
+                    </span>
                   </div>
-                  <h2>
-                    Le plus beau est
+                  <div className="hero-handwritten">
+                    Le plus beau
                     <br />
-                    <em>encore à venir.</em>
-                  </h2>
+                    est encore à venir.<span>♡</span>
+                  </div>
                   <div className="hero-progress">
                     <div>
-                      <span>Votre mariage prend vie</span>
+                      <span>Votre préparation</span>
                       <b>{42 + data.done.length * 10} %</b>
                     </div>
                     <div className="progress-track">
@@ -502,15 +613,27 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-                <div className="hero-side">UNE VIE À AIMER, ENSEMBLE.</div>
               </section>
               <Section
                 eyebrow="LES PETITES ATTENTIONS FONT LES GRANDES HISTOIRES"
                 title="Vos mots du jour"
                 action={
-                  <span className="private-label">
-                    <Heart size={14} /> Rien qu’entre vous
-                  </span>
+                  <button
+                    className="private-label"
+                    onClick={() => {
+                      go("Couple");
+                      setTimeout(
+                        () =>
+                          document.querySelector(".question")?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center",
+                          }),
+                        100,
+                      );
+                    }}
+                  >
+                    Une question pour vous rapprocher <ArrowRight size={16} />
+                  </button>
                 }
               >
                 <Messages />
@@ -518,6 +641,11 @@ export default function App() {
               <Section
                 eyebrow="UN PAS DE PLUS VERS LE GRAND OUI"
                 title="Votre prochaine action"
+                action={
+                  <button className="text-button" onClick={() => go("Couple")}>
+                    Voir tout <ArrowRight size={16} />
+                  </button>
+                }
               >
                 <div className="action-card">
                   <Photo src={pictures.rings} alt="Alliances de mariage" />
@@ -528,15 +656,10 @@ export default function App() {
                         : "À FAIRE ENSEMBLE"}
                     </span>
                     <h3>{tasks[0]}</h3>
-                    <p>
-                      Deux petits anneaux. Une très grande promesse.
-                      <br />
-                      Prenez le temps de trouver ceux qui racontent votre
-                      histoire.
-                    </p>
+                    <p>Comparez les styles et prenez rendez-vous.</p>
                     <span className="action-time">
-                      <CalendarDays size={15} /> Cette semaine <span>·</span> 30
-                      minutes
+                      <CalendarDays size={15} /> Cette semaine{" "}
+                      <Clock3 size={15} /> 30 min
                     </span>
                   </div>
                   <button
@@ -544,9 +667,21 @@ export default function App() {
                     aria-label="Voir l’action alliances"
                     onClick={() => setModal("action")}
                   >
-                    <ArrowUpRight />
+                    <ArrowRight />
                   </button>
                 </div>
+              </Section>
+              <Section
+                eyebrow="VOUS N’ÊTES PAS LES SEULS À DIRE OUI"
+                title="La tribu des mariés"
+                action={
+                  <button className="text-button" onClick={() => go("Tribu")}>
+                    Voir le réseau <ArrowRight size={16} />
+                  </button>
+                }
+              >
+                <Profiles />
+                <Feed />
               </Section>
               <section className="witness-banner">
                 <div className="witness-art">
@@ -577,32 +712,53 @@ export default function App() {
                 <span className="decor-flower">✳</span>
               </section>
               <Section
-                eyebrow="VOUS N’ÊTES PAS LES SEULS À DIRE OUI"
-                title="La tribu des mariés"
-                action={
-                  <button className="text-button" onClick={() => go("Tribu")}>
-                    Rencontrer la tribu <ArrowRight size={16} />
-                  </button>
-                }
-              >
-                <Profiles />
-                <Feed />
-              </Section>
-              <Section
                 eyebrow="DE BELLES ADRESSES, RECOMMANDÉES AVEC AMOUR"
                 title="Les prestataires de la tribu"
                 action={
                   <button className="text-button" onClick={() => go("Offres")}>
-                    Toutes les offres <ArrowRight size={16} />
+                    Voir tous <ArrowRight size={16} />
                   </button>
                 }
               >
                 <p className="demo-notice">
-                  Sélection de démonstration · Prestataires, avis et avantages
-                  fictifs.
+                  Des professionnels recommandés par d’autres couples,
+                  <br />
+                  avec des avantages exclusifs.{" "}
+                  <span>Offres fictives de démonstration.</span>
                 </p>
+                <div className="category-list home-categories">
+                  {[
+                    "Tout",
+                    "Lieux de réception",
+                    "Traiteurs",
+                    "Photographes",
+                    "Costumes",
+                    "Sport",
+                    "Spas et expériences",
+                  ].map((c) => (
+                    <button
+                      key={c}
+                      className={category === c ? "active" : ""}
+                      onClick={() => setCategory(c)}
+                    >
+                      {(
+                        {
+                          Tout: "Tous",
+                          "Lieux de réception": "Lieu",
+                          Traiteurs: "Traiteur",
+                          Photographes: "Photo",
+                          Costumes: "Tenue",
+                          "Spas et expériences": "Beauté",
+                        } as Record<string, string>
+                      )[c] || c}
+                    </button>
+                  ))}
+                </div>
                 <div className="offers-grid">
-                  {offers.slice(0, 3).map((o) => (
+                  {(category === "Tout"
+                    ? offers.slice(0, 3)
+                    : offers.filter((o) => o.category === category)
+                  ).map((o) => (
                     <OfferCard key={o.id} offer={o} />
                   ))}
                 </div>
@@ -952,7 +1108,10 @@ export default function App() {
                 l’achat. Aucun paiement.
               </p>
               <div className="category-list">
-                {["Tout", ...offers.map((o) => o.category)].map((c) => (
+                {[
+                  "Tout",
+                  ...Array.from(new Set(offers.map((o) => o.category))),
+                ].map((c) => (
                   <button
                     key={c}
                     className={category === c ? "active" : ""}
@@ -1400,6 +1559,14 @@ export default function App() {
                   Discussion locale de démonstration, aucun message envoyé à une
                   personne réelle.
                 </p>
+                {modal.startsWith("comment:") &&
+                  data.posts
+                    .find((post) => post.id === Number(modal.split(":")[1]))
+                    ?.comments.map((comment, index) => (
+                      <p className="comment" key={index}>
+                        {comment}
+                      </p>
+                    ))}
                 {modal.startsWith("discussion:") &&
                   (data.conversations[modal.split(":")[1]] || []).map(
                     (text, i) => (
