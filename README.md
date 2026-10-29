@@ -23,7 +23,7 @@ Cinq onglets : Accueil, Couple, IA, Tribu et Offres. Petits mots modifiables, ch
 
 Les modifications sont enregistrées dans le stockage local du navigateur, uniquement sur cet appareil. Elles ne sont pas synchronisées entre membres. La suppression des données du navigateur les efface. Les témoins et autorisations sont simulés : aucun lien d’invitation ni accès externe n’est créé. Les échanges communautaires ne sont pas transmis à de vraies personnes. L’assistant produit des réponses prédéfinies et n’utilise aucune API. Aucun abonnement, paiement, réservation ou économie réelle n’est enregistré.
 
-Toutes les offres, avis et participations sont fictifs. Les économies potentielles sont des estimations de démonstration, séparées des économies confirmées (0 €). Les images d’illustration sont chargées depuis Unsplash et nécessitent une connexion à images.unsplash.com. Le mot-symbole dans l’interface est une interprétation typographique du logo fourni, pas son fichier original.
+Toutes les offres, avis et participations sont fictifs. Les économies potentielles sont des estimations de démonstration, séparées des économies confirmées (0 €). Les images d’illustration sont chargées depuis Unsplash et nécessitent une connexion à images.unsplash.com. Le logo est une version transparente préparée à partir du visuel fourni. Son graphisme affiche « Kouple. » comme sur la pièce jointe ; le nom de l’application reste Kouples.
 
 Le nom des membres Sarah et Julien est celui du scénario de démonstration.
 
@@ -32,3 +32,7 @@ Si les photos sont bloquées par le réseau, une illustration locale prend le re
 ## Direction artistique
 
 Interface blanche, noire et orange inspirée de la référence mobile fournie : couverture immersive, cartes de petits mots compactes, profils ronds et prestataires en liste avec bandeaux collectifs. Les polices DM Serif Display et DM Sans sont hébergées dans le projet avec leurs licences SIL OFL. Les photos restent des illustrations Unsplash ; une image décorative locale prend le relais si le réseau les bloque.
+
+## Accueil et espaces personnels
+
+La tribu est présentée en grandes cartes horizontales avec publications, likes, commentaires et couples sauvegardés. Les catégories de prestataires ouvrent le catalogue filtré. Le bandeau photo ouvre le détail d’une offre fictive. Les cartes Votre DA, Espace témoins, EVG / EVJF et Discours ouvrent des espaces utilisables, avec sauvegarde locale des inspirations, du planning et du brouillon. Aucune invitation ni aucun message n’est transmis à un tiers.

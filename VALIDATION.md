@@ -29,3 +29,19 @@ Aucun paiement, API d’IA, message à un tiers ou réservation réelle n’est 
 ## Refonte visuelle du 29 octobre 2026
 
 La compilation de production et la vérification TypeScript passent avec la nouvelle interface. Les contrôles TypeScript du build sont conservés, via l’API officielle du compilateur. La refonte a été envoyée sur GitHub. La nouvelle vérification navigateur a confirmé le chargement mobile et la persistance des messages, puis détecté une étiquette d’action terminée masquée par le nouveau style. Cette étiquette a été rétablie. Le contrôle TypeScript et le build passent après correction ; la relance navigateur a été empêchée par l’expiration de la revue automatique. Les autres résultats navigateur ci-dessus concernent la version initiale.
+
+## Logo, grandes cartes et espaces essentiels — 29 octobre 2026
+
+Validation sur la version compilée avec Chromium :
+
+- Logo PNG transparent chargé depuis le projet.
+- Aucun débordement horizontal aux largeurs 320, 390, 430, 768 et 1440 pixels.
+- Quatre cartes de couples, cinq catégories de prestataires et quatre espaces essentiels présents.
+- Likes des couples persistants après rechargement, favoris et commentaires fonctionnels.
+- État « Terminée » visible après validation de la prochaine action.
+- Enregistrement et relecture de la direction artistique ; ajout d’un témoin ; sauvegarde du planning EVG / EVJF et du brouillon de discours.
+- Filtrage du catalogue depuis la catégorie Photo, ouverture de l’offre mise en avant et participation de démonstration.
+- Navigation vers la tribu et réponse de l’assistant de démonstration vérifiées.
+- Aucune erreur JavaScript détectée. Compilation de production et TypeScript réussis.
+
+Les requêtes Unsplash ont été délibérément bloquées dans ce test pour exercer l’illustration locale de secours. Le chargement des véritables photos sur le déploiement Vercel reste distinct de ce test. Le programme de validation a terminé avec le code de sortie 0.

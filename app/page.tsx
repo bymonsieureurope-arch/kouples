@@ -24,8 +24,19 @@ import {
   MapPin,
   Star,
   Bookmark,
+  Palette,
+  Plane,
+  Mic,
 } from "lucide-react";
-import { initial, pictures, couples, offers, type Data } from "../lib/demo";
+import {
+  initial,
+  pictures,
+  couples,
+  offers,
+  type Data,
+  coupleStories,
+  providerCategories,
+} from "../lib/demo";
 const tabs = [
   { name: "Accueil", icon: Home },
   { name: "Couple", icon: Heart },
@@ -50,6 +61,17 @@ function Photo(props: React.ImgHTMLAttributes<HTMLImageElement>) {
       {...props}
       ref={ref}
       onError={(event) => fallback(event.currentTarget)}
+    />
+  );
+}
+function Logo() {
+  return (
+    <img
+      className="brand-image"
+      src="/kouple-logo.png"
+      alt="Kouple. — logo de Kouples"
+      width={2172}
+      height={724}
     />
   );
 }
@@ -178,13 +200,15 @@ export default function App() {
     title,
     children,
     action,
+    className = "",
   }: {
+    className?: string;
     eyebrow?: string;
     title: string;
     children: React.ReactNode;
     action?: React.ReactNode;
   }) => (
-    <section className="section">
+    <section className={"section " + className}>
       <div className="section-heading">
         <div>
           {eyebrow && <span className="eyebrow">{eyebrow}</span>}
@@ -361,6 +385,84 @@ export default function App() {
       </button>
     </div>
   );
+  const TribeCards = () => (
+    <div className="tribe-cards">
+      {couples.map((couple, index) => {
+        const liked = (data.tribeLikes || []).includes(couple.name),
+          saved = (data.savedCouples || []).includes(couple.name),
+          comments = data.tribeComments?.[couple.name] || [];
+        return (
+          <article className="couple-card" key={couple.name}>
+            <button
+              className="couple-card-photo"
+              aria-label={"Discuter avec " + couple.name}
+              onClick={() => setModal("discussion:" + couple.name)}
+            >
+              <Photo src={couple.img} alt={couple.name} loading="lazy" />
+            </button>
+            <div className="couple-card-body">
+              <h3>{couple.name}</h3>
+              <p className="couple-card-meta">
+                {couple.month} · {couple.city}
+              </p>
+              <button
+                className="couple-story"
+                onClick={() => setModal("tribe:" + couple.name)}
+              >
+                {coupleStories[index].text}
+              </button>
+              <div className="couple-card-actions">
+                <button
+                  aria-label={
+                    (liked ? "Ne plus aimer" : "Aimer") +
+                    " la publication de " +
+                    couple.name
+                  }
+                  aria-pressed={liked}
+                  className={liked ? "liked" : ""}
+                  onClick={() =>
+                    update({
+                      tribeLikes: liked
+                        ? (data.tribeLikes || []).filter(
+                            (name) => name !== couple.name,
+                          )
+                        : [...(data.tribeLikes || []), couple.name],
+                    })
+                  }
+                >
+                  <Heart size={17} fill={liked ? "currentColor" : "none"} />
+                  {coupleStories[index].likes + (liked ? 1 : 0)}
+                </button>
+                <button
+                  aria-label={"Commenter la publication de " + couple.name}
+                  onClick={() => setModal("tribe:" + couple.name)}
+                >
+                  <MessageCircle size={17} />
+                  {comments.length}
+                </button>
+                <button
+                  className={saved ? "saved" : ""}
+                  aria-label={"Sauvegarder le couple " + couple.name}
+                  aria-pressed={saved}
+                  onClick={() =>
+                    update({
+                      savedCouples: saved
+                        ? (data.savedCouples || []).filter(
+                            (name) => name !== couple.name,
+                          )
+                        : [...(data.savedCouples || []), couple.name],
+                    })
+                  }
+                >
+                  <Bookmark size={16} fill={saved ? "currentColor" : "none"} />
+                </button>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
   const Feed = () => (
     <div className="feed">
       {data.posts.map((p) => (
@@ -462,7 +564,7 @@ export default function App() {
     <>
       <aside className="sidebar">
         <button className="brand" onClick={() => go("Accueil")}>
-          K<span>o</span>uples<span>.</span>
+          <Logo />
         </button>
         <div className="club-label">LE CLUB DES BELLES HISTOIRES</div>
         <nav>
@@ -499,7 +601,13 @@ export default function App() {
       </aside>
       <div className={"app-shell view-" + tab.toLowerCase()}>
         <header>
-          <div className="mobile-brand brand">Kouples.</div>
+          <button
+            className="mobile-brand brand"
+            aria-label="Accueil Kouples"
+            onClick={() => go("Accueil")}
+          >
+            <Logo />
+          </button>
           <div className="breadcrumb">
             Votre espace <span>/</span> {tab}
           </div>
@@ -596,11 +704,7 @@ export default function App() {
                       écrire votre histoire.
                     </span>
                   </div>
-                  <div className="hero-handwritten">
-                    Le plus beau
-                    <br />
-                    est encore à venir.<span>♡</span>
-                  </div>
+
                   <div className="hero-progress">
                     <div>
                       <span>Votre préparation</span>
@@ -641,6 +745,7 @@ export default function App() {
               <Section
                 eyebrow="UN PAS DE PLUS VERS LE GRAND OUI"
                 title="Votre prochaine action"
+                className="next-action-section"
                 action={
                   <button className="text-button" onClick={() => go("Couple")}>
                     Voir tout <ArrowRight size={16} />
@@ -679,95 +784,159 @@ export default function App() {
               <Section
                 eyebrow="VOUS N’ÊTES PAS LES SEULS À DIRE OUI"
                 title="La tribu des mariés"
+                className="tribe-section"
                 action={
                   <button className="text-button" onClick={() => go("Tribu")}>
                     Voir le réseau <ArrowRight size={16} />
                   </button>
                 }
               >
-                <Profiles />
-                <Feed />
+                <TribeCards />
               </Section>
-              <section className="witness-banner">
-                <div className="witness-art">
-                  <Users size={39} />
-                  <span>✦</span>
-                </div>
-                <div>
-                  <span className="eyebrow">
-                    BIEN ENTOURÉS, TOUT EST PLUS BEAU
-                  </span>
-                  <h2>
-                    Vos témoins font aussi
-                    <br />
-                    partie de l’aventure.
-                  </h2>
-                  <p>
-                    Un peu d’aide, beaucoup d’amour. Invitez vos complices
-                    <br className="desktop-br" /> et préparez les plus beaux
-                    moments ensemble.
-                  </p>
-                  <button
-                    className="dark-button"
-                    onClick={() => setModal("witness")}
-                  >
-                    Inviter nos témoins <Plus size={16} />
-                  </button>
-                </div>
-                <span className="decor-flower">✳</span>
-              </section>
               <Section
-                eyebrow="DE BELLES ADRESSES, RECOMMANDÉES AVEC AMOUR"
-                title="Les prestataires de la tribu"
+                title="Prestataires"
+                className="provider-section"
                 action={
-                  <button className="text-button" onClick={() => go("Offres")}>
-                    Voir tous <ArrowRight size={16} />
+                  <button
+                    className="text-button"
+                    onClick={() => {
+                      setCategory("Tout");
+                      go("Offres");
+                    }}
+                  >
+                    Voir tout <ArrowRight size={16} />
                   </button>
                 }
               >
-                <p className="demo-notice">
-                  Des professionnels recommandés par d’autres couples,
-                  <br />
-                  avec des avantages exclusifs.{" "}
-                  <span>Offres fictives de démonstration.</span>
-                </p>
-                <div className="category-list home-categories">
-                  {[
-                    "Tout",
-                    "Lieux de réception",
-                    "Traiteurs",
-                    "Photographes",
-                    "Costumes",
-                    "Sport",
-                    "Spas et expériences",
-                  ].map((c) => (
+                <div className="provider-categories">
+                  {providerCategories.map((c) => (
                     <button
-                      key={c}
-                      className={category === c ? "active" : ""}
-                      onClick={() => setCategory(c)}
+                      className="provider-category"
+                      aria-label={"Voir la catégorie " + c.name}
+                      key={c.name}
+                      onClick={() => {
+                        setCategory(c.category);
+                        go("Offres");
+                      }}
                     >
-                      {(
-                        {
-                          Tout: "Tous",
-                          "Lieux de réception": "Lieu",
-                          Traiteurs: "Traiteur",
-                          Photographes: "Photo",
-                          Costumes: "Tenue",
-                          "Spas et expériences": "Beauté",
-                        } as Record<string, string>
-                      )[c] || c}
+                      <Photo src={c.image} alt="" loading="lazy" />
+                      <span>{c.name}</span>
+                      <i>
+                        <ArrowRight size={17} />
+                      </i>
                     </button>
                   ))}
                 </div>
-                <div className="offers-grid">
-                  {(category === "Tout"
-                    ? offers.slice(0, 3)
-                    : offers.filter((o) => o.category === category)
-                  ).map((o) => (
-                    <OfferCard key={o.id} offer={o} />
+                <button
+                  className="featured-offer"
+                  onClick={() => setModal("featured-offer")}
+                >
+                  <Photo
+                    src={pictures.flowers}
+                    alt="Décoration florale de mariage"
+                    loading="lazy"
+                  />
+                  <span className="featured-shade" />
+                  <span className="featured-copy">
+                    <small>OFFRE EXCLUSIVE · DÉMO</small>
+                    <strong>−10 %</strong>
+                    <span>sur une sélection de photographes partenaires</span>
+                    <b>
+                      Découvrir l’offre <ArrowRight size={17} />
+                    </b>
+                    <em>Offre fictive de démonstration</em>
+                  </span>
+                </button>
+              </Section>
+              <Section
+                title="Vos espaces essentiels"
+                className="essentials-section"
+              >
+                <div className="essential-grid">
+                  {[
+                    {
+                      name: "Votre DA",
+                      desc: "Inspirez-vous et créez votre univers",
+                      img: pictures.moodboard,
+                      icon: Palette,
+                      modal: "inspiration",
+                      tone: "rust",
+                    },
+                    {
+                      name: "Espace témoins",
+                      desc: "Invitez et organisez",
+                      img: pictures.witnesses,
+                      icon: Users,
+                      modal: "witness",
+                      tone: "rust",
+                    },
+                    {
+                      name: "EVG / EVJF",
+                      desc: "Idées et planning",
+                      img: pictures.party,
+                      icon: Plane,
+                      modal: "party",
+                      tone: "gold",
+                    },
+                    {
+                      name: "Discours",
+                      desc: "Conseils et exemples",
+                      img: pictures.speech,
+                      icon: Mic,
+                      modal: "speech",
+                      tone: "olive",
+                    },
+                  ].map((tile) => (
+                    <button
+                      className={"essential-card " + tile.tone}
+                      key={tile.name}
+                      onClick={() => setModal(tile.modal)}
+                    >
+                      <Photo src={tile.img} alt="" loading="lazy" />
+                      <span className="essential-shade" />
+                      <span className="essential-copy">
+                        <tile.icon size={26} />
+                        <strong>{tile.name}</strong>
+                        <small>{tile.desc}</small>
+                      </span>
+                      <i>
+                        <ArrowRight size={16} />
+                      </i>
+                    </button>
                   ))}
                 </div>
               </Section>
+              <section className="discover-tribe">
+                <Photo
+                  src={pictures.hero}
+                  alt="Un couple partage un moment ensemble"
+                  loading="lazy"
+                />
+                <div>
+                  <h2>
+                    Rejoignez des couples
+                    <br />
+                    qui se marient comme vous.
+                  </h2>
+                  <p>
+                    <span>
+                      <MapPin size={13} />
+                      Même région
+                    </span>
+                    <span>
+                      <CalendarDays size={13} />
+                      Même période
+                    </span>
+                    <span>
+                      <Heart size={13} />
+                      Mêmes envies
+                    </span>
+                  </p>
+                  <button className="dark-button" onClick={() => go("Tribu")}>
+                    Découvrir la tribu <ArrowRight size={17} />
+                  </button>
+                </div>
+              </section>
               <div className="closing">
                 <Heart size={22} />
                 <h2>
@@ -777,7 +946,7 @@ export default function App() {
                 </h2>
                 <p>On est heureux d’en faire un petit bout avec vous.</p>
                 <span className="brand">
-                  Kouples<span>.</span>
+                  <Logo />
                 </span>
               </div>
             </>
@@ -1178,6 +1347,180 @@ export default function App() {
             >
               <X />
             </button>
+            {modal === "featured-offer" && (
+              <>
+                <h2>Votre avantage photo</h2>
+                <p className="muted">
+                  Prestataire et offre fictifs. Aucune réservation réelle n’est
+                  effectuée.
+                </p>
+                <OfferCard
+                  offer={offers.find((offer) => offer.id === "photo")!}
+                />
+              </>
+            )}
+            {modal.startsWith("tribe:") && (
+              <>
+                <h2>{modal.slice(6)}</h2>
+                <p>
+                  {
+                    coupleStories[
+                      couples.findIndex(
+                        (couple) => couple.name === modal.slice(6),
+                      )
+                    ]?.text
+                  }
+                </p>
+                <p className="muted">
+                  Conversation communautaire de démonstration, enregistrée sur
+                  cet appareil.
+                </p>
+                {(data.tribeComments?.[modal.slice(6)] || []).map(
+                  (comment, index) => (
+                    <p className="comment" key={index}>
+                      {comment}
+                    </p>
+                  ),
+                )}
+                <form
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    const name = modal.slice(6),
+                      text = String(
+                        new FormData(event.currentTarget).get("text"),
+                      ).trim();
+                    if (!text) return;
+                    update({
+                      tribeComments: {
+                        ...data.tribeComments,
+                        [name]: [
+                          ...(data.tribeComments?.[name] || []),
+                          data.members.join(" & ") + " : " + text,
+                        ],
+                      },
+                    });
+                    event.currentTarget.reset();
+                    setToast("Commentaire enregistré en démonstration");
+                  }}
+                >
+                  <label>
+                    Votre commentaire
+                    <textarea name="text" required maxLength={2000} />
+                  </label>
+                  <button className="dark-button">
+                    Publier le commentaire <Send size={16} />
+                  </button>
+                </form>
+              </>
+            )}
+            {modal === "inspiration" && (
+              <>
+                <span className="eyebrow">VOTRE DIRECTION ARTISTIQUE</span>
+                <h2>Un mariage qui vous ressemble.</h2>
+                <p>
+                  Une ambiance, des couleurs, des petits détails… gardez vos
+                  envies au même endroit.
+                </p>
+                <form
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    const form = new FormData(event.currentTarget);
+                    update({
+                      weddingStyle: String(form.get("style")),
+                      inspiration: String(form.get("notes")),
+                    });
+                    setModal("");
+                    setToast("Votre univers est enregistré");
+                  }}
+                >
+                  <label>
+                    Votre ambiance
+                    <select
+                      name="style"
+                      defaultValue={data.weddingStyle || "Naturel"}
+                    >
+                      {[
+                        "Naturel",
+                        "Romantique",
+                        "Minimaliste",
+                        "Festif",
+                        "Élégant",
+                      ].map((style) => (
+                        <option key={style}>{style}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Vos inspirations
+                    <textarea
+                      name="notes"
+                      defaultValue={data.inspiration || ""}
+                      placeholder="Nos couleurs, les matières, les fleurs, les idées à garder…"
+                      maxLength={5000}
+                    />
+                  </label>
+                  <button className="dark-button">
+                    Enregistrer notre univers <Check size={16} />
+                  </button>
+                </form>
+              </>
+            )}
+            {(modal === "party" || modal === "speech") && (
+              <>
+                <span className="eyebrow">À PRÉPARER ENSEMBLE</span>
+                <h2>
+                  {modal === "party"
+                    ? "Vos EVG / EVJF"
+                    : "Les mots qui restent."}
+                </h2>
+                <p>
+                  {modal === "party"
+                    ? "Un week-end, une soirée, une aventure : notez les dates, les personnes à inviter, le budget et vos envies. Vous pouvez confier l’organisation à vos témoins."
+                    : "Commencez par un souvenir, dites ce que vous aimez chez l’autre, puis terminez par une promesse. Quelques mots sincères suffisent."}
+                </p>
+                <form
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    const text = String(
+                      new FormData(event.currentTarget).get("text"),
+                    );
+                    update(
+                      modal === "party"
+                        ? { partyPlan: text }
+                        : { speechDraft: text },
+                    );
+                    setModal("");
+                    setToast("Votre préparation est enregistrée");
+                  }}
+                >
+                  <label>
+                    {modal === "party"
+                      ? "Votre planning et vos idées"
+                      : "Votre brouillon"}
+                    <textarea
+                      name="text"
+                      maxLength={12000}
+                      defaultValue={
+                        modal === "party"
+                          ? data.partyPlan || ""
+                          : data.speechDraft || ""
+                      }
+                    />
+                  </label>
+                  <button className="dark-button">
+                    Enregistrer <Check size={16} />
+                  </button>
+                </form>
+                {modal === "party" && (
+                  <button
+                    className="text-button panel-link"
+                    onClick={() => setModal("witness")}
+                  >
+                    Organiser avec nos témoins <ArrowRight size={16} />
+                  </button>
+                )}
+              </>
+            )}
             {modal.startsWith("message") && (
               <>
                 <span className="eyebrow">VOTRE ESPACE PRIVÉ</span>

@@ -11,6 +11,10 @@ export const pictures = {
   suit: photo("photo-1594938298603-c8148c4dae35"),
   venue: photo("photo-1519167758481-83f550bb49b3"),
   couple: photo("photo-1529333166437-7750a6dd5a70"),
+  moodboard: photo("photo-1434030216411-0b793f4b4173", 700),
+  party: photo("photo-1511795409834-ef04bbd61622", 700),
+  speech: photo("photo-1455390582262-044cdead277a", 700),
+  witnesses: photo("photo-1517457373958-b7bdd4587205", 700),
   dinner: photo("photo-1414235077428-338989a2e8c0"),
 };
 export const couples = [
@@ -173,6 +177,13 @@ type Post = {
   comments: string[];
 };
 export type Data = {
+  tribeLikes: string[];
+  savedCouples: string[];
+  tribeComments: Record<string, string[]>;
+  weddingStyle: string;
+  inspiration: string;
+  partyPlan: string;
+  speechDraft: string;
   savedPosts: number[];
   members: string[];
   conversations: Record<string, string[]>;
@@ -192,6 +203,13 @@ export type Data = {
   chat: { role: string; text: string }[];
 };
 export const initial: Data = {
+  tribeLikes: [],
+  savedCouples: [],
+  tribeComments: {},
+  weddingStyle: "Naturel",
+  inspiration: "",
+  partyPlan: "",
+  speechDraft: "",
   savedPosts: [],
   members: ["Sarah", "Julien"],
   conversations: {},
@@ -225,3 +243,29 @@ export const initial: Data = {
   groups: [],
   chat: [],
 };
+
+export const coupleStories = [
+  {
+    text: "On hésite pour le traiteur… Vous avez des recommandations ?",
+    likes: 24,
+  },
+  {
+    text: "Plutôt dîner en extérieur ou grande salle ? On aimerait vos avis !",
+    likes: 36,
+  },
+  {
+    text: "Des idées de faire-part originaux et pleins de personnalité ?",
+    likes: 18,
+  },
+  {
+    text: "Notre playlist prend forme ! Quelle chanson pour votre première danse ?",
+    likes: 29,
+  },
+];
+export const providerCategories = [
+  { name: "Lieux", category: "Lieux de réception", image: pictures.venue },
+  { name: "Traiteur", category: "Traiteurs", image: pictures.dinner },
+  { name: "Photo", category: "Photographes", image: pictures.photographer },
+  { name: "Fleurs", category: "Fleuristes", image: pictures.flowers },
+  { name: "Tenues", category: "Costumes", image: pictures.suit },
+];
