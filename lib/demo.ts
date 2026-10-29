@@ -178,6 +178,11 @@ type Post = {
   comments: string[];
 };
 export type Data = {
+  homeCity: string;
+  interests: string[];
+  subscriptionMonths: number;
+  receivedReferral: string;
+  coffeeInvites: { couple: string; date: string; message: string }[];
   followingCouples: string[];
   tribeLikes: string[];
   savedCouples: string[];
@@ -205,6 +210,11 @@ export type Data = {
   chat: { role: string; text: string }[];
 };
 export const initial: Data = {
+  homeCity: "Paris",
+  interests: ["Nature", "Petits comités", "Cuisine"],
+  subscriptionMonths: 3,
+  receivedReferral: "",
+  coffeeInvites: [],
   followingCouples: [],
   tribeLikes: [],
   savedCouples: [],

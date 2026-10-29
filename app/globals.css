@@ -4700,3 +4700,1088 @@ footer {
     display: inline;
   }
 }
+
+/* A more visible next step, a local community and the monthly club benefit. */
+.portrait {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.next-action-section {
+  background: #173e32;
+  border-color: #173e32;
+  color: #fff;
+  box-shadow: 0 12px 30px #173e3212;
+}
+.next-action-section .action-card {
+  background: transparent;
+  color: white;
+}
+.next-action-section .action-card p {
+  color: #d2ded7;
+}
+.next-action-section .section-icon {
+  color: #ffdb9d;
+}
+.next-action-section .section-heading > .text-button {
+  color: #ffdb9d;
+}
+.next-action-section .action-time {
+  color: #e4ece7;
+}
+.next-action-section .round-arrow {
+  background: #ffe0aa;
+  color: #172c21;
+}
+.next-action-section .action-card > img {
+  border: 1px solid #ffffff22;
+}
+.credit-widget {
+  margin-top: 28px;
+  background: linear-gradient(115deg, #fff4de, #fff9ed);
+  border: 1px solid #ead7b5;
+  border-radius: 24px;
+  padding: 28px 30px;
+}
+.credit-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+.credit-widget-header > span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+}
+.credit-widget-header > small {
+  background: #fffaf1;
+  border: 1px solid #eadcc5;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 10px;
+  color: #947447;
+}
+.credit-widget-amount {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin: 22px 0 12px;
+}
+.credit-widget-amount strong {
+  font-size: 62px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -3px;
+}
+.credit-widget-amount > span {
+  color: #887555;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.credit-widget > p {
+  color: #7c6b50;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.credit-widget > p > b {
+  color: #423927;
+}
+.credit-months {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 26px 0 23px;
+  position: relative;
+  gap: 10px;
+}
+.credit-months::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  background: #eadcc4;
+}
+.credit-months > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 7px;
+}
+.credit-months > div > span {
+  position: relative;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  border: 1px solid #e4d3b6;
+  background: #fffaef;
+  color: #b29c7c;
+  display: grid;
+  place-items: center;
+}
+.credit-months .earned > span {
+  background: #203a2c;
+  color: white;
+  border-color: #203a2c;
+}
+.credit-months b {
+  font-size: 13px;
+  font-weight: 600;
+  color: #a28d6a;
+}
+.credit-months .earned b {
+  color: #3c4433;
+}
+.credit-months small {
+  font-size: 10px;
+  color: #9c8c72;
+}
+.credit-widget > button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid #e7dbc6;
+  padding: 17px 0 0;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a3b23;
+}
+.credit-modal-total {
+  background: #fff4de;
+  border-radius: 20px;
+  padding: 28px;
+  margin: 24px 0;
+}
+.credit-modal-total > strong {
+  display: block;
+  font-size: 52px;
+  line-height: 1.1;
+  letter-spacing: -2px;
+}
+.credit-modal-total > span {
+  display: block;
+  font-size: 14px;
+  color: #9b8057;
+  margin-top: 12px;
+  line-height: 1.6;
+}
+.wallet-credit {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  background: #fff5e4;
+  border: 1px solid #efdfc5;
+  border-radius: 17px;
+  padding: 19px;
+  margin-bottom: 24px;
+}
+.wallet-credit > span {
+  flex: 1;
+  color: #927b58;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.wallet-credit strong {
+  display: block;
+  font-size: 26px;
+  color: #342f25;
+  margin-top: 4px;
+}
+.tribe-section {
+  background: #e8f0eb;
+  border: 1px solid #d5e2d9;
+  padding: 30px;
+  border-radius: 27px;
+}
+.tribe-section .section-heading h2,
+.tribe-section .section-icon {
+  color: #214b36;
+}
+.tribe-section .section-heading > .text-button {
+  color: #416d50;
+}
+.tribe-intro {
+  color: #6d8071;
+}
+.community-location {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 23px 0 16px;
+}
+.community-location > button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  background: #fff;
+  border: 1px solid #cddbd2;
+  border-radius: 23px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #365d43;
+}
+.community-location > small {
+  color: #849489;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.community-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 26px;
+}
+.community-tabs > button {
+  padding: 10px 15px;
+  border-radius: 22px;
+  font-size: 12px;
+  background: #dce8df;
+  color: #6c806f;
+}
+.community-tabs > button.active {
+  background: #264b36;
+  color: #fff;
+}
+.tribe-composer {
+  border-color: #d6e0d9;
+}
+.tribe-cards {
+  gap: 27px;
+}
+.couple-card {
+  border-color: #d7e2db;
+  box-shadow: 0 5px 20px #24432e04;
+}
+.couple-card-header > .portrait {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+.couple-card-header p .couple-distance {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: #4b7659;
+  font-size: 11px;
+  margin-top: 6px;
+}
+.couple-card-header > button {
+  background: #f0f5f1;
+  color: #4e7158;
+}
+.couple-card-header > button.is-following {
+  background: #244d33;
+  color: #fff;
+}
+.couple-card-photo {
+  position: relative;
+  overflow: hidden;
+  background: #b8c9be;
+}
+.couple-card-photo > .portrait {
+  height: 290px;
+}
+.couple-card-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 44%, #14271ad1);
+  pointer-events: none;
+}
+.photo-persona {
+  position: absolute;
+  bottom: 22px;
+  left: 23px;
+  right: 20px;
+  text-align: left;
+  color: #fff;
+  z-index: 1;
+}
+.photo-persona > strong {
+  display: block;
+  font-size: 23px;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+}
+.photo-persona > small {
+  display: block;
+  font-size: 12px;
+  margin-top: 7px;
+  color: #ecf0e9;
+}
+.view-couple-profile {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #fffffff0;
+  color: #203b2a;
+  border-radius: 21px;
+  padding: 8px 11px;
+  font-size: 10px;
+  z-index: 1;
+}
+.couple-bio {
+  font-size: 14px;
+  color: #718074;
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+.couple-shared-interests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 23px;
+}
+.couple-shared-interests > button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #65806b;
+  background: #f1f7f2;
+  border: 1px solid #e0e9e2;
+  border-radius: 17px;
+  font-size: 10px;
+  padding: 6px 9px;
+  line-height: 1.5;
+}
+.couple-connect-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-top: 14px;
+}
+.couple-connect-buttons > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 10px;
+  border: 1px solid #dbe5dd;
+  color: #486952;
+  background: #f8fbf8;
+  border-radius: 12px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.couple-connect-buttons > button:last-child {
+  grid-column: 1/-1;
+}
+.couple-connect-buttons svg {
+  flex-shrink: 0;
+}
+.community-empty {
+  grid-column: 1/-1;
+  padding: 35px 25px;
+  border: 1px dashed #bfcfc3;
+  border-radius: 20px;
+  background: #f5faf6;
+  text-align: center;
+}
+.community-empty > svg {
+  margin: 0 auto 18px;
+  color: #82a18a;
+}
+.community-empty h3 {
+  font-size: 22px;
+  line-height: 1.5;
+}
+.community-empty p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #829186;
+  margin: 16px 0 24px;
+}
+.tribe-more {
+  background: #f7fbf8;
+  border-color: #c9d9ce;
+  color: #3e6048;
+}
+.profile > .portrait {
+  width: 94px;
+  height: 94px;
+  margin: auto;
+  border-radius: 50%;
+}
+.couple-home-city {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 15px;
+  color: #7d6a4f;
+}
+.profile-portrait {
+  width: 100%;
+  height: 265px;
+  border-radius: 17px;
+  margin: 12px 0 25px;
+}
+.profile-distance {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  color: #5b7a63 !important;
+}
+.profile-interests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0;
+}
+.profile-interests > span {
+  font-size: 12px;
+  padding: 7px 11px;
+  border-radius: 17px;
+  color: #597962;
+  background: #eef5ef;
+}
+.profile-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+.outline-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid #d8ded8;
+  border-radius: 26px;
+  padding: 13px 18px;
+  min-height: 47px;
+  font-size: 14px;
+  background: #fff;
+}
+.icebreaker-options {
+  display: grid;
+  gap: 13px;
+  margin: 25px 0;
+}
+.icebreaker-options > button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid #e0e8e0;
+  border-radius: 15px;
+  background: #f6faf6;
+  padding: 18px;
+  font-size: 15px;
+  line-height: 1.7;
+  text-align: left;
+}
+.icebreaker-options > button > svg {
+  flex-shrink: 0;
+  color: #567b5f;
+}
+.interest-choices {
+  border: 1px solid #e5ebe5;
+  border-radius: 15px;
+  padding: 12px 18px;
+  margin: 24px 0;
+}
+.interest-choices legend {
+  font-size: 14px;
+  color: #83917f;
+  padding: 0 5px;
+}
+.compare-progress {
+  display: grid;
+  gap: 23px;
+  margin: 25px 0;
+}
+.compare-progress > div > p {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.compare-progress .progress-track {
+  background: #e8eee8;
+}
+.compare-progress .progress-track > span {
+  background: #5c8062;
+}
+.compare-progress > div:first-child .progress-track > span {
+  background: #e2ac63;
+}
+.provider-personal-intro {
+  font-size: 16px;
+  color: #78787d;
+  line-height: 1.7;
+  margin: -5px 0 26px;
+  max-width: 600px;
+}
+.provider-personal-intro > span {
+  display: block;
+  font-size: 11px;
+  color: #a5a09a;
+  margin-top: 9px;
+}
+.provider-people {
+  display: flex;
+  gap: 21px;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #e4d7c8 transparent;
+  margin-right: -10px;
+  padding: 0 10px 10px 0;
+}
+.provider-person {
+  flex: 0 0 205px;
+  min-width: 0;
+  padding: 0;
+  text-align: left;
+}
+.provider-person > div {
+  position: relative;
+  height: 245px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #e2d6c8;
+}
+.provider-person > div::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 55%, #20160cb3);
+  pointer-events: none;
+}
+.provider-person > div > span {
+  position: absolute;
+  bottom: 16px;
+  left: 13px;
+  right: 13px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  z-index: 1;
+}
+.provider-person > strong {
+  display: block;
+  font-size: 17px;
+  line-height: 1.5;
+  font-weight: 600;
+  margin: 14px 0 6px;
+  letter-spacing: -0.4px;
+}
+.provider-person > small {
+  display: block;
+  color: #96908a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.provider-owner {
+  font-size: 12px;
+  color: #9b8061;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+.offer-image > .portrait {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  border-radius: 15px 15px 0 0;
+}
+.referral-banner {
+  text-align: center;
+  border-top: 1px solid #ede8df;
+  border-radius: 25px;
+  padding: 38px 25px;
+  margin: 0 0 55px;
+  background: #faf5ed;
+}
+.referral-banner > svg {
+  margin: 0 auto 18px;
+  color: #b89b71;
+}
+.referral-banner h2 {
+  font-size: 28px;
+  line-height: 1.5;
+}
+.referral-banner p {
+  color: #9d8d76;
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 20px 0 26px;
+}
+.referral-code {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff5e6;
+  border: 1px dashed #e5cca9;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 23px 0;
+  color: #ad8c57;
+}
+.referral-code > span {
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.referral-code b {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 16px;
+  color: #6b573e;
+  margin-top: 7px;
+}
+.referral-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 23px 0;
+}
+.referral-arrival {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+  background: #fff5e4;
+  border: 1px solid #f0dfbf;
+  border-radius: 17px;
+  margin-bottom: 23px;
+  color: #866a3c;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.referral-arrival > svg,
+.referral-arrival > button {
+  flex-shrink: 0;
+}
+.referral-arrival > button {
+  margin-left: auto;
+}
+@media (max-width: 1100px) and (min-width: 761px) {
+  .profile > .portrait {
+    width: 76px;
+    height: 76px;
+  }
+  .tribe-section {
+    padding: 24px;
+  }
+}
+@media (max-width: 760px) {
+  .next-action-section {
+    background: #173e32;
+    color: #fff;
+    padding: 24px 20px;
+    border-radius: 23px;
+  }
+  .next-action-section .action-card h3 {
+    color: white;
+  }
+  .credit-widget {
+    margin-top: 23px;
+    padding: 23px 21px;
+    border-radius: 21px;
+  }
+  .credit-widget-header {
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .credit-widget-header > span {
+    font-size: 9px;
+    letter-spacing: 0.9px;
+    gap: 7px;
+    line-height: 1.6;
+  }
+  .credit-widget-header > span > svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+  }
+  .credit-widget-header > small {
+    font-size: 9px;
+    padding: 4px 7px;
+  }
+  .credit-widget-amount {
+    gap: 17px;
+    margin: 24px 0 17px;
+  }
+  .credit-widget-amount strong {
+    font-size: 52px;
+    letter-spacing: -2.5px;
+  }
+  .credit-widget-amount > span {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .credit-widget > p {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+  .credit-months {
+    margin: 24px 0;
+    gap: 5px;
+  }
+  .credit-months b {
+    font-size: 12px;
+  }
+  .credit-months small {
+    font-size: 10px;
+  }
+  .credit-widget > button {
+    font-size: 14px;
+    padding-top: 17px;
+  }
+  .tribe-section {
+    margin: 64px -7px 0;
+    padding: 25px 16px;
+    border: 1px solid #d5e2d9;
+    border-radius: 24px;
+  }
+  .tribe-section .section-heading h2 {
+    font-size: 24px;
+  }
+  .tribe-section .section-heading > .text-button {
+    color: #426d50;
+  }
+  .tribe-intro {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .community-location {
+    display: block;
+    margin: 24px 0 16px;
+  }
+  .community-location > button {
+    font-size: 13px;
+    padding: 10px 13px;
+  }
+  .community-location > small {
+    display: block;
+    font-size: 10px;
+    margin-top: 10px;
+  }
+  .community-tabs {
+    gap: 7px;
+    margin-bottom: 24px;
+  }
+  .community-tabs > button {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+  .tribe-composer {
+    padding: 16px;
+    gap: 12px;
+  }
+  .composer-prompt {
+    font-size: 13px;
+  }
+  .tribe-cards {
+    gap: 28px;
+  }
+  .couple-card {
+    border-radius: 19px;
+  }
+  .couple-card-header {
+    padding: 16px 13px;
+    gap: 9px;
+  }
+  .couple-card-header > .portrait {
+    width: 40px;
+    height: 40px;
+  }
+  .couple-card-header h3 {
+    font-size: 14px;
+  }
+  .couple-card-header p {
+    font-size: 10px;
+  }
+  .couple-card-header p .couple-distance {
+    font-size: 10px;
+    gap: 4px;
+  }
+  .couple-card-header > button {
+    padding: 8px 9px;
+    font-size: 10px;
+  }
+  .couple-card-photo > .portrait {
+    height: 275px;
+  }
+  .photo-persona {
+    left: 17px;
+    bottom: 21px;
+    right: 15px;
+  }
+  .photo-persona > strong {
+    font-size: 23px;
+  }
+  .photo-persona > small {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .view-couple-profile {
+    top: 13px;
+    right: 13px;
+    font-size: 9px;
+    padding: 7px 10px;
+  }
+  .couple-card-body {
+    padding: 20px 15px 22px;
+  }
+  .couple-bio {
+    font-size: 14px;
+    line-height: 1.75;
+    margin-bottom: 17px;
+  }
+  .couple-shared-interests {
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+  .couple-shared-interests > button {
+    font-size: 10px;
+    padding: 6px 8px;
+  }
+  .couple-connect-buttons {
+    gap: 8px;
+  }
+  .couple-connect-buttons > button {
+    min-height: 44px;
+    font-size: 10px;
+    padding: 10px 7px;
+    gap: 6px;
+  }
+  .couple-connect-buttons > button > svg {
+    width: 15px;
+    height: 15px;
+  }
+  .couple-card-actions {
+    gap: 8px;
+  }
+  .couple-card-actions button {
+    font-size: 11px;
+  }
+  .couple-card-actions button small {
+    font-size: 9px;
+  }
+  .couple-direct {
+    font-size: 11px;
+  }
+  .profile > .portrait {
+    width: 53px;
+    height: 53px;
+  }
+  .community-empty {
+    padding: 28px 18px;
+  }
+  .community-empty h3 {
+    font-size: 20px;
+  }
+  .community-empty p {
+    font-size: 14px;
+  }
+  .provider-personal-intro {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .provider-personal-intro > span {
+    font-size: 10px;
+  }
+  .provider-people {
+    gap: 16px;
+    margin-right: -20px;
+    padding-right: 20px;
+  }
+  .provider-person {
+    flex-basis: 196px;
+  }
+  .provider-person > div {
+    height: 245px;
+    border-radius: 19px;
+  }
+  .provider-person > div > span {
+    font-size: 12px;
+    bottom: 17px;
+  }
+  .provider-person > strong {
+    font-size: 17px;
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+  .provider-person > small {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .provider-owner {
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .offer-image > .portrait {
+    min-height: 280px;
+  }
+  .profile-portrait {
+    height: 240px;
+  }
+  .profile-buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .outline-button {
+    font-size: 14px;
+    padding: 14px 17px;
+  }
+  .credit-modal-total {
+    padding: 25px 23px;
+  }
+  .credit-modal-total > strong {
+    font-size: 47px;
+  }
+  .credit-modal-total > span {
+    font-size: 13px;
+  }
+  .wallet-credit {
+    padding: 18px;
+  }
+  .wallet-credit > span {
+    font-size: 11px;
+  }
+  .wallet-credit strong {
+    font-size: 25px;
+  }
+  .referral-banner {
+    padding: 33px 23px;
+    margin-bottom: 45px;
+  }
+  .referral-banner h2 {
+    font-size: 25px;
+    line-height: 1.5;
+  }
+  .referral-banner p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .referral-banner .dark-button {
+    width: 100%;
+    font-size: 14px;
+  }
+  .referral-code {
+    padding: 18px;
+    gap: 12px;
+  }
+  .referral-code b {
+    font-size: 14px;
+  }
+  .referral-buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .referral-arrival {
+    font-size: 12px;
+    padding: 15px;
+  }
+}
+@media (max-width: 359px) {
+  .tribe-section {
+    padding: 23px 12px;
+  }
+  .credit-widget {
+    padding: 21px 17px;
+  }
+  .credit-widget-header > span {
+    font-size: 8px;
+    letter-spacing: 0.5px;
+  }
+  .credit-widget-amount {
+    gap: 12px;
+  }
+  .credit-widget-amount strong {
+    font-size: 44px;
+  }
+  .credit-widget-amount > span {
+    font-size: 11px;
+  }
+  .community-tabs > button {
+    font-size: 10px;
+    padding: 9px 10px;
+  }
+  .couple-card-header > .portrait {
+    width: 36px;
+    height: 36px;
+  }
+  .couple-card-header > button {
+    margin-left: 45px;
+  }
+  .couple-card-photo > .portrait {
+    height: 240px;
+  }
+  .photo-persona > strong {
+    font-size: 20px;
+  }
+  .couple-connect-buttons {
+    grid-template-columns: 1fr;
+  }
+  .couple-connect-buttons > button:last-child {
+    grid-column: auto;
+  }
+  .couple-card-actions {
+    justify-content: flex-start;
+    gap: 11px;
+  }
+  .profile > .portrait {
+    width: 46px;
+    height: 46px;
+  }
+  .offer-image > .portrait {
+    height: 225px;
+    min-height: 0;
+  }
+}
+/* A wide portrait on small screens keeps the owner's whole face visible. */
+@media (max-width: 760px) {
+  .offer-main {
+    display: block;
+    padding: 0;
+  }
+  .offer-image {
+    width: 100%;
+    height: 265px;
+    min-height: 0;
+  }
+  .offer-image > .portrait {
+    width: 100%;
+    height: 265px;
+    min-height: 0;
+    border-radius: 17px 17px 0 0;
+  }
+  .offer-body {
+    padding: 24px;
+  }
+  .offer-body h3 {
+    font-size: 23px;
+    padding-right: 28px;
+  }
+}

@@ -28,6 +28,10 @@ import {
   Palette,
   Plane,
   Mic,
+  Gift,
+  Coffee,
+  Navigation,
+  Share2,
 } from "lucide-react";
 import {
   initial,
@@ -36,8 +40,19 @@ import {
   offers,
   type Data,
   coupleStories,
-  providerCategories,
 } from "../lib/demo";
+import { Portrait } from "../components/portrait";
+import { ConnectionPanels } from "../components/connection-panels";
+import {
+  coupleDetails,
+  homeCities,
+  distanceKm,
+  distanceText,
+  creditAmount,
+  providerPeople,
+  homeProviderIds,
+  interestPhrase,
+} from "../lib/connections";
 const tabs = [
   { name: "Accueil", icon: Home },
   { name: "Couple", icon: Heart },
@@ -85,12 +100,19 @@ export default function App() {
     [category, setCategory] = useState("Tout"),
     [city, setCity] = useState("Toutes les villes"),
     [month, setMonth] = useState("Toutes les périodes"),
-    [input, setInput] = useState("");
+    [input, setInput] = useState(""),
+    [communityFilter, setCommunityFilter] = useState<
+      "nearby" | "all" | "following"
+    >("nearby"),
+    [messageDraft, setMessageDraft] = useState("");
   useEffect(() => {
     try {
       const saved = localStorage.getItem("kouples-demo-v1");
       if (saved) setData({ ...initial, ...JSON.parse(saved) });
     } catch {}
+    const referral = new URLSearchParams(window.location.search).get("parrain");
+    if (referral && /^KOUPLES-[A-Z0-9-]{1,60}$/.test(referral))
+      setData((previous) => ({ ...previous, receivedReferral: referral }));
     setLoaded(true);
   }, []);
   useEffect(() => {
@@ -146,6 +168,29 @@ export default function App() {
     };
   }, [modal]);
   const update = (patch: Partial<Data>) => setData((d) => ({ ...d, ...patch }));
+  const homeOrigin = homeCities[data.homeCity] || homeCities.Paris;
+  const credit = creditAmount(data.subscriptionMonths);
+  const referralCode =
+    "KOUPLES-" +
+    (data.members
+      .join("-")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toUpperCase()
+      .replace(/[^A-Z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .slice(0, 40) || "CLUB");
+  const referralUrl =
+    typeof window === "undefined"
+      ? ""
+      : new URL(
+          "/?parrain=" + encodeURIComponent(referralCode),
+          window.location.origin,
+        ).toString();
+  const openConversation = (name: string, draft = "") => {
+    setMessageDraft(draft);
+    setModal("discussion:" + name);
+  };
   const go = (name: string) => {
     setTab(name);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -233,10 +278,17 @@ export default function App() {
     <article className="offer-card">
       <div className="offer-main">
         <div className="offer-image">
-          <Photo src={o.image} alt={o.category} loading="lazy" />
+          <Portrait
+            kind="manager"
+            index={providerPeople[o.id].portrait}
+            alt={"Portrait d’illustration de " + providerPeople[o.id].name}
+          />
         </div>
         <div className="offer-body">
           <h3>{o.name}</h3>
+          <p className="provider-owner">
+            {providerPeople[o.id].name} · {providerPeople[o.id].role}
+          </p>
           <p className="specialty">
             {"specialty" in o ? String(o.specialty) : o.category}
           </p>
@@ -251,11 +303,10 @@ export default function App() {
             </span>
           </div>
           <blockquote>
-            « {o.desc} »
-            <cite>— {"signature" in o ? String(o.signature) : "L’équipe"}</cite>
+            « {o.desc} »<cite>— {providerPeople[o.id].name}</cite>
           </blockquote>
           <span className="provider-demo">
-            Prestataire, avis et offre fictifs · Démonstration
+            Prestataire, portrait, avis et offre fictifs · Démonstration
           </span>
         </div>
         <button
@@ -363,10 +414,14 @@ export default function App() {
             className="profile"
             key={c.name}
             onClick={() => {
-              setModal("discussion:" + c.name);
+              openConversation(c.name);
             }}
           >
-            <Photo src={c.img} alt={c.name} />
+            <Portrait
+              kind="couple"
+              index={couples.findIndex((couple) => couple.name === c.name)}
+              alt={"Portrait illustratif de " + c.name}
+            />
             <h3>{c.name}</h3>
             <p>
               <span>{c.month}</span>
@@ -386,158 +441,252 @@ export default function App() {
       </button>
     </div>
   );
+  const visibleCouples = (limit = 4) =>
+    couples
+      .map((couple, index) => ({ couple, index }))
+      .filter(
+        ({ couple }) =>
+          tab !== "Tribu" ||
+          ((city === "Toutes les villes" || couple.city === city) &&
+            (month === "Toutes les périodes" || couple.month === month)),
+      )
+      .filter(
+        ({ couple }) =>
+          communityFilter !== "following" ||
+          (data.followingCouples || []).includes(couple.name),
+      )
+      .sort((a, b) =>
+        communityFilter === "nearby"
+          ? distanceKm(homeOrigin, coupleDetails[a.index]) -
+            distanceKm(homeOrigin, coupleDetails[b.index])
+          : a.index - b.index,
+      )
+      .slice(0, limit);
   const TribeCards = ({ limit = 4 }: { limit?: number }) => (
     <div className="tribe-cards">
-      {couples
-        .map((couple, index) => ({ couple, index }))
-        .filter(
-          ({ couple }) =>
-            tab !== "Tribu" ||
-            ((city === "Toutes les villes" || couple.city === city) &&
-              (month === "Toutes les périodes" || couple.month === month)),
-        )
-        .slice(0, limit)
-        .map(({ couple, index }) => {
-          const liked = (data.tribeLikes || []).includes(couple.name),
-            saved = (data.savedCouples || []).includes(couple.name),
-            comments = data.tribeComments?.[couple.name] || [];
-          return (
-            <article className="couple-card" key={couple.name}>
-              <div className="couple-card-header">
-                <Photo src={couple.img} alt="" loading="lazy" />
-                <div>
-                  <h3>{couple.name}</h3>
-                  <p>
-                    {couple.month} · {couple.city}
-                  </p>
-                </div>
+      {visibleCouples(limit).map(({ couple, index }) => {
+        const liked = (data.tribeLikes || []).includes(couple.name),
+          saved = (data.savedCouples || []).includes(couple.name),
+          comments = data.tribeComments?.[couple.name] || [];
+        return (
+          <article className="couple-card" key={couple.name}>
+            <div className="couple-card-header">
+              <Portrait kind="couple" index={index} alt="" />
+              <div>
+                <h3>{couple.name}</h3>
+                <p>
+                  {couple.month} · {couple.city}
+                  <span className="couple-distance">
+                    <Navigation size={12} />
+                    {distanceText(distanceKm(homeOrigin, coupleDetails[index]))}
+                  </span>
+                </p>
+              </div>
+              <button
+                className={
+                  (data.followingCouples || []).includes(couple.name)
+                    ? "is-following"
+                    : ""
+                }
+                aria-label={
+                  ((data.followingCouples || []).includes(couple.name)
+                    ? "Ne plus suivre "
+                    : "Suivre ") + couple.name
+                }
+                aria-pressed={(data.followingCouples || []).includes(
+                  couple.name,
+                )}
+                onClick={() =>
+                  update({
+                    followingCouples: (data.followingCouples || []).includes(
+                      couple.name,
+                    )
+                      ? (data.followingCouples || []).filter(
+                          (name) => name !== couple.name,
+                        )
+                      : [...(data.followingCouples || []), couple.name],
+                  })
+                }
+              >
+                {(data.followingCouples || []).includes(couple.name) ? (
+                  <>
+                    <Check size={14} />
+                    Suivi
+                  </>
+                ) : (
+                  <>
+                    <Plus size={14} />
+                    Suivre
+                  </>
+                )}
+              </button>
+            </div>
+            <button
+              className="couple-card-photo"
+              aria-label={"Découvrir le profil de " + couple.name}
+              onClick={() => setModal("profile:" + couple.name)}
+            >
+              <Portrait
+                kind="couple"
+                index={index}
+                alt={"Portrait illustratif de " + couple.name}
+              />
+              <span className="photo-persona">
+                <strong>{couple.name}</strong>
+                <small>
+                  {couple.city} ·{" "}
+                  {distanceText(distanceKm(homeOrigin, coupleDetails[index]))}
+                </small>
+              </span>
+              <span className="view-couple-profile">
+                Voir leur profil <ArrowUpRight size={16} />
+              </span>
+            </button>
+            <div className="couple-card-body">
+              <p className="couple-bio">{coupleDetails[index].bio}</p>
+              <div className="couple-shared-interests">
+                {coupleDetails[index].interests
+                  .slice()
+                  .sort(
+                    (a, b) =>
+                      Number((data.interests || []).includes(b)) -
+                      Number((data.interests || []).includes(a)),
+                  )
+                  .slice(0, 2)
+                  .map((interest) => (
+                    <button
+                      key={interest}
+                      onClick={() =>
+                        openConversation(
+                          couple.name,
+                          `Nous aussi, on aime ${interestPhrase(interest)} ! On en discute ?`,
+                        )
+                      }
+                    >
+                      <Heart size={12} />
+                      {interest}
+                      {(data.interests || []).includes(interest)
+                        ? " en commun"
+                        : ""}
+                    </button>
+                  ))}
+              </div>
+              <span className="discussion-topic">ON AIMERAIT VOTRE AVIS</span>
+              <button
+                className="couple-story"
+                onClick={() => setModal("tribe:" + couple.name)}
+              >
+                {coupleStories[index].text}
+              </button>
+              <div className="couple-card-actions">
                 <button
-                  className={
-                    (data.followingCouples || []).includes(couple.name)
-                      ? "is-following"
-                      : ""
-                  }
                   aria-label={
-                    ((data.followingCouples || []).includes(couple.name)
-                      ? "Ne plus suivre "
-                      : "Suivre ") + couple.name
+                    (liked ? "Ne plus aimer" : "Aimer") +
+                    " la publication de " +
+                    couple.name
                   }
-                  aria-pressed={(data.followingCouples || []).includes(
-                    couple.name,
-                  )}
+                  aria-pressed={liked}
+                  className={liked ? "liked" : ""}
                   onClick={() =>
                     update({
-                      followingCouples: (data.followingCouples || []).includes(
-                        couple.name,
-                      )
-                        ? (data.followingCouples || []).filter(
+                      tribeLikes: liked
+                        ? (data.tribeLikes || []).filter(
                             (name) => name !== couple.name,
                           )
-                        : [...(data.followingCouples || []), couple.name],
+                        : [...(data.tribeLikes || []), couple.name],
                     })
                   }
                 >
-                  {(data.followingCouples || []).includes(couple.name) ? (
-                    <>
-                      <Check size={14} />
-                      Suivi
-                    </>
-                  ) : (
-                    <>
-                      <Plus size={14} />
-                      Suivre
-                    </>
-                  )}
+                  <Heart size={17} fill={liked ? "currentColor" : "none"} />
+                  <span>
+                    J’aime{" "}
+                    <small>
+                      {coupleStories[index].likes + (liked ? 1 : 0)}
+                    </small>
+                  </span>
+                </button>
+                <button
+                  aria-label={"Commenter la publication de " + couple.name}
+                  onClick={() => setModal("tribe:" + couple.name)}
+                >
+                  <MessageCircle size={17} />
+                  <span>
+                    Commenter <small>{comments.length}</small>
+                  </span>
+                </button>
+                <button
+                  className={saved ? "saved" : ""}
+                  aria-label={"Sauvegarder le couple " + couple.name}
+                  aria-pressed={saved}
+                  onClick={() =>
+                    update({
+                      savedCouples: saved
+                        ? (data.savedCouples || []).filter(
+                            (name) => name !== couple.name,
+                          )
+                        : [...(data.savedCouples || []), couple.name],
+                    })
+                  }
+                >
+                  <Bookmark size={16} fill={saved ? "currentColor" : "none"} />
+                  <span>{saved ? "Gardé" : "Garder"}</span>
                 </button>
               </div>
               <button
-                className="couple-card-photo"
-                aria-label={"Voir la publication de " + couple.name}
+                className="join-conversation"
                 onClick={() => setModal("tribe:" + couple.name)}
               >
-                <Photo src={couple.img} alt={couple.name} loading="lazy" />
+                Partager un conseil <ArrowRight size={18} />
               </button>
-              <div className="couple-card-body">
-                <span className="discussion-topic">ON AIMERAIT VOTRE AVIS</span>
-                <button
-                  className="couple-story"
-                  onClick={() => setModal("tribe:" + couple.name)}
-                >
-                  {coupleStories[index].text}
+              <div className="couple-connect-buttons">
+                <button onClick={() => setModal("icebreaker:" + couple.name)}>
+                  <Sparkles size={17} />
+                  Briser la glace
                 </button>
-                <div className="couple-card-actions">
-                  <button
-                    aria-label={
-                      (liked ? "Ne plus aimer" : "Aimer") +
-                      " la publication de " +
-                      couple.name
-                    }
-                    aria-pressed={liked}
-                    className={liked ? "liked" : ""}
-                    onClick={() =>
-                      update({
-                        tribeLikes: liked
-                          ? (data.tribeLikes || []).filter(
-                              (name) => name !== couple.name,
-                            )
-                          : [...(data.tribeLikes || []), couple.name],
-                      })
-                    }
-                  >
-                    <Heart size={17} fill={liked ? "currentColor" : "none"} />
-                    <span>
-                      J’aime{" "}
-                      <small>
-                        {coupleStories[index].likes + (liked ? 1 : 0)}
-                      </small>
-                    </span>
-                  </button>
-                  <button
-                    aria-label={"Commenter la publication de " + couple.name}
-                    onClick={() => setModal("tribe:" + couple.name)}
-                  >
-                    <MessageCircle size={17} />
-                    <span>
-                      Commenter <small>{comments.length}</small>
-                    </span>
-                  </button>
-                  <button
-                    className={saved ? "saved" : ""}
-                    aria-label={"Sauvegarder le couple " + couple.name}
-                    aria-pressed={saved}
-                    onClick={() =>
-                      update({
-                        savedCouples: saved
-                          ? (data.savedCouples || []).filter(
-                              (name) => name !== couple.name,
-                            )
-                          : [...(data.savedCouples || []), couple.name],
-                      })
-                    }
-                  >
-                    <Bookmark
-                      size={16}
-                      fill={saved ? "currentColor" : "none"}
-                    />
-                    <span>{saved ? "Gardé" : "Garder"}</span>
-                  </button>
-                </div>
-                <button
-                  className="join-conversation"
-                  onClick={() => setModal("tribe:" + couple.name)}
-                >
-                  Partager un conseil <ArrowRight size={18} />
+                <button onClick={() => setModal("coffee:" + couple.name)}>
+                  <Coffee size={17} />
+                  {(data.coffeeInvites || []).some(
+                    (invite) => invite.couple === couple.name,
+                  )
+                    ? "Café proposé"
+                    : "Proposer un café"}
                 </button>
-                <button
-                  className="couple-direct"
-                  onClick={() => setModal("discussion:" + couple.name)}
-                >
-                  Leur envoyer un message <Send size={14} />
+                <button onClick={() => setModal("compare:" + couple.name)}>
+                  <CheckCheck size={17} />
+                  Comparer nos préparatifs
                 </button>
               </div>
-            </article>
-          );
-        })}
+              <button
+                className="couple-direct"
+                onClick={() => openConversation(couple.name)}
+              >
+                Leur envoyer un message <Send size={14} />
+              </button>
+            </div>
+          </article>
+        );
+      })}
+      {visibleCouples(limit).length === 0 && (
+        <div className="community-empty">
+          <Users size={30} />
+          <h3>Vos prochaines rencontres vous attendent.</h3>
+          <p>
+            {communityFilter === "following"
+              ? "Retrouvez ici les couples que vous suivez, selon vos filtres."
+              : "Essayez une autre ville ou une autre période."}
+          </p>
+          <button
+            className="dark-button"
+            onClick={() => {
+              setCommunityFilter("nearby");
+              setCity("Toutes les villes");
+              setMonth("Toutes les périodes");
+            }}
+          >
+            Découvrir les couples proches <ArrowRight size={17} />
+          </button>
+        </div>
+      )}
     </div>
   );
   const Feed = ({ recentOnly = false }: { recentOnly?: boolean }) => (
@@ -721,6 +870,29 @@ export default function App() {
           </div>
         </header>
         <main>
+          {data.receivedReferral && (
+            <div className="referral-arrival">
+              <Gift size={21} />
+              <span>
+                Bienvenue ! Un couple ami vous fait découvrir la démo Kouples.
+              </span>
+              <button
+                aria-label="Fermer l’accueil parrainage"
+                onClick={() => {
+                  update({ receivedReferral: "" });
+                  const url = new URL(window.location.href);
+                  url.searchParams.delete("parrain");
+                  window.history.replaceState(
+                    {},
+                    "",
+                    url.pathname + url.search + url.hash,
+                  );
+                }}
+              >
+                <X size={17} />
+              </button>
+            </div>
+          )}
           <div className="page-intro">
             <div>
               <span className="eyebrow">
@@ -806,6 +978,58 @@ export default function App() {
                   </div>
                 </div>
               </section>
+              <section
+                className="credit-widget"
+                aria-label="Votre crédit By Monsieur"
+              >
+                <div className="credit-widget-header">
+                  <span>
+                    <Gift size={20} />
+                    VOTRE CRÉDIT BY MONSIEUR
+                  </span>
+                  <small>Simulation</small>
+                </div>
+                <div className="credit-widget-amount">
+                  <strong>{credit.toLocaleString("fr-FR")} €</strong>
+                  <span>
+                    de crédit disponible
+                    <br />
+                    dans cette démo
+                  </span>
+                </div>
+                <p>
+                  Chaque mois d’abonnement, <b>100 € de réduction en plus.</b>
+                </p>
+                <div className="credit-months">
+                  {Array.from(
+                    { length: 4 },
+                    (_, index) =>
+                      Math.max(1, data.subscriptionMonths - 2) + index,
+                  ).map((month) => (
+                    <div
+                      key={month}
+                      className={
+                        month <= data.subscriptionMonths ? "earned" : ""
+                      }
+                    >
+                      <span>
+                        {month <= data.subscriptionMonths ? (
+                          <Check size={14} />
+                        ) : (
+                          <Plus size={14} />
+                        )}
+                      </span>
+                      <b>
+                        {month <= data.subscriptionMonths ? "100 €" : "+100 €"}
+                      </b>
+                      <small>Mois {month}</small>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => setModal("credit")}>
+                  Voir mon crédit <ArrowRight size={18} />
+                </button>
+              </section>
               <Section
                 eyebrow="LES PETITES ATTENTIONS FONT LES GRANDES HISTOIRES"
                 title="Vos mots du jour"
@@ -884,6 +1108,33 @@ export default function App() {
                   Les mêmes questions, les mêmes petits bonheurs. Faites
                   connaissance avec les couples qui vivent la même aventure.
                 </p>
+                <div className="community-location">
+                  <button onClick={() => setModal("location")}>
+                    <MapPin size={18} />
+                    Autour de {data.homeCity || "Paris"}{" "}
+                    <PencilLine size={14} />
+                  </button>
+                  <small>Distances et profils de démonstration</small>
+                </div>
+                <div className="community-tabs">
+                  {[
+                    { id: "nearby", label: "Les plus proches" },
+                    { id: "all", label: "Toute la tribu" },
+                    { id: "following", label: "Mes suivis" },
+                  ].map((filter) => (
+                    <button
+                      key={filter.id}
+                      className={communityFilter === filter.id ? "active" : ""}
+                      onClick={() =>
+                        setCommunityFilter(
+                          filter.id as "nearby" | "all" | "following",
+                        )
+                      }
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                </div>
                 <div className="tribe-composer">
                   <Photo src={pictures.sarah} alt="" />
                   <button
@@ -922,24 +1173,41 @@ export default function App() {
                   </button>
                 }
               >
-                <div className="provider-categories">
-                  {providerCategories.map((c) => (
-                    <button
-                      className="provider-category"
-                      aria-label={"Voir la catégorie " + c.name}
-                      key={c.name}
-                      onClick={() => {
-                        setCategory(c.category);
-                        go("Offres");
-                      }}
-                    >
-                      <Photo src={c.image} alt="" loading="lazy" />
-                      <span>{c.name}</span>
-                      <i>
-                        <ArrowRight size={17} />
-                      </i>
-                    </button>
-                  ))}
+                <p className="provider-personal-intro">
+                  Derrière chaque belle adresse, une personne à rencontrer.{" "}
+                  <span>Professionnels et portraits d’illustration · Démo</span>
+                </p>
+                <div className="provider-people">
+                  {homeProviderIds.map((id) => {
+                    const offer = offers.find((o) => o.id === id)!,
+                      person = providerPeople[id];
+                    return (
+                      <button
+                        className="provider-person"
+                        key={id}
+                        aria-label={
+                          "Rencontrer " + person.name + " de " + offer.name
+                        }
+                        onClick={() => setModal("provider:" + id)}
+                      >
+                        <div>
+                          <Portrait
+                            kind="manager"
+                            index={person.portrait}
+                            alt={"Portrait illustratif de " + person.name}
+                          />
+                          <span>
+                            {person.name} vous accueille{" "}
+                            <ArrowUpRight size={17} />
+                          </span>
+                        </div>
+                        <strong>{offer.name}</strong>
+                        <small>
+                          {offer.category} · {offer.city}
+                        </small>
+                      </button>
+                    );
+                  })}
                 </div>
                 <button
                   className="featured-offer"
@@ -1063,6 +1331,22 @@ export default function App() {
                   <Logo />
                 </span>
               </div>
+              <section className="referral-banner">
+                <Gift size={27} />
+                <h2>
+                  Une belle aventure,
+                  <br />
+                  ça se partage.
+                </h2>
+                <p>Invitez un couple ami à rejoindre votre tribu.</p>
+                <button
+                  className="dark-button"
+                  onClick={() => setModal("referral")}
+                >
+                  <Share2 size={18} />
+                  Parrainer un ami
+                </button>
+              </section>
             </>
           )}
           {tab === "Couple" && (
@@ -1070,6 +1354,14 @@ export default function App() {
               <div className="couple-cover">
                 <Heart size={32} />
                 <h2>{data.members.join(" & ")}</h2>
+                <button
+                  className="couple-home-city"
+                  onClick={() => setModal("location")}
+                >
+                  <MapPin size={16} />
+                  {data.homeCity || "Paris"} · Personnaliser nos rencontres{" "}
+                  <PencilLine size={14} />
+                </button>
                 <p>
                   Notre grand oui ·{" "}
                   {new Date(data.date + "T12:00:00").toLocaleDateString(
@@ -1363,6 +1655,32 @@ export default function App() {
                 title="Les discussions du moment"
                 className="tribe-section"
               >
+                <div className="community-location">
+                  <button onClick={() => setModal("location")}>
+                    <MapPin size={18} />
+                    Depuis {data.homeCity || "Paris"} · Modifier
+                  </button>
+                  <small>Distances indicatives de démonstration</small>
+                </div>
+                <div className="community-tabs">
+                  {[
+                    { id: "nearby", label: "Les plus proches" },
+                    { id: "all", label: "Toute la tribu" },
+                    { id: "following", label: "Mes suivis" },
+                  ].map((filter) => (
+                    <button
+                      key={filter.id}
+                      className={communityFilter === filter.id ? "active" : ""}
+                      onClick={() =>
+                        setCommunityFilter(
+                          filter.id as "nearby" | "all" | "following",
+                        )
+                      }
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                </div>
                 <TribeCards />
               </Section>
               <Section
@@ -1467,6 +1785,45 @@ export default function App() {
             >
               <X />
             </button>
+            <ConnectionPanels
+              modal={modal}
+              data={data}
+              update={update}
+              setModal={setModal}
+              notify={setToast}
+              openConversation={openConversation}
+              referralCode={referralCode}
+              referralUrl={referralUrl}
+            />
+            {modal.startsWith("provider:") &&
+              (() => {
+                const offer = offers.find((o) => o.id === modal.slice(9));
+                if (!offer) return null;
+                const person = providerPeople[offer.id];
+                return (
+                  <>
+                    <span className="eyebrow">
+                      UNE PERSONNE, UNE BELLE ADRESSE · DÉMO
+                    </span>
+                    <h2>Rencontrez {person.name}.</h2>
+                    <p>
+                      {person.role} · {offer.name}
+                    </p>
+                    <OfferCard offer={offer} />
+                    <button
+                      className="text-button panel-link"
+                      onClick={() => {
+                        setCategory(offer.category);
+                        setModal("");
+                        go("Offres");
+                      }}
+                    >
+                      Découvrir les offres de cette spécialité{" "}
+                      <ArrowRight size={17} />
+                    </button>
+                  </>
+                );
+              })()}
             {modal === "featured-offer" && (
               <>
                 <h2>Votre avantage photo</h2>
@@ -1880,6 +2237,17 @@ export default function App() {
               <>
                 <span className="eyebrow">VOS AVANTAGES, EN TOUTE CLARTÉ</span>
                 <h2>Votre portefeuille</h2>
+                <button
+                  className="wallet-credit"
+                  onClick={() => setModal("credit")}
+                >
+                  <Gift size={20} />
+                  <span>
+                    Crédit By Monsieur · simulation
+                    <strong>{credit.toLocaleString("fr-FR")} €</strong>
+                  </span>
+                  <ArrowRight size={18} />
+                </button>
                 <div className="wallet-numbers">
                   <div>
                     <small>Économies confirmées</small>
@@ -2081,7 +2449,15 @@ export default function App() {
                 >
                   <label>
                     Votre message
-                    <textarea name="text" required maxLength={2000} />
+                    <textarea
+                      key={modal}
+                      name="text"
+                      required
+                      maxLength={2000}
+                      defaultValue={
+                        modal.startsWith("discussion:") ? messageDraft : ""
+                      }
+                    />
                   </label>
                   <button className="dark-button">
                     Envoyer <Send size={16} />

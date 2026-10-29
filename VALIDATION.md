@@ -57,3 +57,17 @@ Les requêtes Unsplash ont été délibérément bloquées dans ce test pour exe
 - Actions, direction artistique, témoins, planning EVG / EVJF, discours, filtrage des offres et assistant de démonstration vérifiés.
 - Compilation de production et TypeScript réussis. Tests fonctionnels terminés avec le code de sortie 0 et aucune erreur JavaScript.
 - Après les derniers ajustements visuels, contrôle distinct aux largeurs 320, 390, 430, 768 et 1440 px : aucun débordement horizontal, aucune mention d’offre coupée, aucun chevauchement des commandes de la prochaine action. Selfie local et captures de la présentation finale vérifiés. Programme terminé avec le code de sortie 0, sans erreur JavaScript.
+
+## Rencontres locales, gérants et crédit By Monsieur — 29 octobre 2026
+
+- `npm test` : cinq tests nommés exécutés et réussis sur le montant du crédit, les mois invalides/incomplets, les distances symétriques, la distance Paris–Lyon et les libellés de proximité. Aucun test ignoré.
+- Compilation de production et TypeScript réussis.
+- Crédit placé avant les petits mots : 300 € au départ, 400 € après simulation d’un mois, persistant après rechargement.
+- Localisation modifiée de Paris à Bordeaux : premier couple et distance recalculés, centres d’intérêt communs actualisés ; filtres de proximité et de suivi vérifiés.
+- Images locales optimisées des couples et des gérants chargées avec réponse HTTP 200 ; dix cadres de portraits distincts sur les dix prestataires. Six enseignes nommées à l’accueil.
+- Profil, premier message suggéré, message privé non publié dans le fil, invitation café conservée après rechargement et comparaison de préparation sans exposition des mots privés.
+- Favori et participation à l’offre By Monsieur ; portefeuille gardant le crédit simulé de 400 € séparé des économies confirmées à 0 € et du potentiel de 240 €.
+- Copie effective du lien de parrainage dans le presse-papiers, accueil à l’ouverture et fermeture du bandeau ; aucune modification du crédit liée au parrainage.
+- Publication, commentaire et action marquée terminée vérifiés.
+- Pas de débordement horizontal à 320, 390, 430, 768 et 1440 px sur l’accueil et le catalogue. Contraste de l’action et du panneau tribu confirmé ; captures inspectées.
+- Programme Chromium terminé avec le code de sortie 0, aucune erreur JavaScript détectée. Les images Unsplash étaient bloquées volontairement pendant ce test, sans empêcher les portraits locaux de s’afficher.

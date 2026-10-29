@@ -15,6 +15,7 @@ Dans un environnement cloud, le serveur écoute sur le port 3000. Utilisez la fo
 
 - `npm run typecheck` : vérification TypeScript.
 - `npm run build` : compilation de production.
+- `npm test` : cinq tests du calcul de crédit et des distances (Node.js 24).
 - `npm start` : lancement de la version compilée.
 
 ## Ce que contient la démonstration
@@ -36,3 +37,13 @@ Interface minimaliste blanche avec accents discrets, logo noir, typographie neut
 ## Accueil et espaces personnels
 
 La tribu propose un fil social avec deux grandes publications sur l’accueil et toutes les discussions sur son onglet dédié. On peut suivre un couple, publier depuis l’accueil, aimer, garder une publication, partager un conseil et envoyer un message privé. Les messages privés sont conservés séparément des publications communautaires. Les catégories de prestataires ouvrent le catalogue filtré. Le bandeau photo ouvre le détail d’une offre fictive. Les cartes Votre DA, Espace témoins, EVG / EVJF et Discours ouvrent des espaces utilisables, avec sauvegarde locale des inspirations, du planning et du brouillon. Aucune invitation ni aucun message n’est transmis à un tiers.
+
+## Rencontres, crédit et parrainage
+
+La ville du couple (Paris par défaut) et ses envies sont modifiables depuis la tribu ou son profil. Les distances sont indicatives, à vol d’oiseau, à partir de positions de démonstration proches des centres-villes ; aucun GPS personnel n’est demandé. Le fil peut être trié par proximité ou limité aux couples suivis. Les profils, suggestions de premiers messages, propositions de café et comparaisons de préparatifs sont locaux et fictifs. Les invitations ne sont pas envoyées à de vraies personnes.
+
+Les portraits illustratifs des quatre couples et des dix gérants sont générés et stockés dans le projet. Un composant SVG cadre chaque portrait depuis deux images locales partagées, optimisées par Next.js. Les enseignes apparaissent directement par leur nom, avec leur gérant, à la place des catégories génériques de l’accueil.
+
+Le crédit By Monsieur est affiché immédiatement après la photo d’accueil, avant les petits mots. La règle simulée est de 100 € par mois d’abonnement validé, avec trois mois et 300 € au départ. Le bouton de simulation ajoute un mois ; ce crédit ne devient jamais une économie réellement confirmée dans le portefeuille. Aucun abonnement réel n’est vérifié ou débité.
+
+Le parrainage crée un lien de démonstration vers le même déploiement, avec un code basé sur les prénoms du scénario. L’utilisateur peut le copier ou ouvrir la feuille de partage native de son navigateur. Aucun envoi automatique, abonnement ni bonus financier n’est déclenché. L’ouverture du lien affiche un accueil de démonstration.
