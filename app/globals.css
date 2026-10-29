@@ -2358,3 +2358,12 @@ footer {
     transition: none !important;
   }
 }
+
+.action-card .tag.completed {
+  display: inline-flex;
+  background: #fff0d8;
+  color: #9c5000;
+  font-size: 7px;
+  padding: 3px 6px;
+  margin-bottom: 4px;
+}

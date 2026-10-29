@@ -650,7 +650,12 @@ export default function App() {
                 <div className="action-card">
                   <Photo src={pictures.rings} alt="Alliances de mariage" />
                   <div>
-                    <span className="tag">
+                    <span
+                      className={
+                        "tag" +
+                        (data.done.includes(tasks[0]) ? " completed" : "")
+                      }
+                    >
                       {data.done.includes(tasks[0])
                         ? "TERMINÉE"
                         : "À FAIRE ENSEMBLE"}
