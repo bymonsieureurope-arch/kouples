@@ -45,3 +45,15 @@ Validation sur la version compilée avec Chromium :
 - Aucune erreur JavaScript détectée. Compilation de production et TypeScript réussis.
 
 Les requêtes Unsplash ont été délibérément bloquées dans ce test pour exercer l’illustration locale de secours. Le chargement des véritables photos sur le déploiement Vercel reste distinct de ce test. Le programme de validation a terminé avec le code de sortie 0.
+
+## Lecture aérée et tribu sociale — 29 octobre 2026
+
+- Logo transparent noir « Kouples. » chargé depuis le projet.
+- Selfie illustratif local chargé et optimisé par Next.js, y compris lorsque les images Unsplash sont bloquées.
+- Police DM Sans confirmée sur les titres, corps des petits mots à 16 px sur mobile, espacement de 72 px avant les prestataires. L’accueil mesuré lors du test fonctionnel atteint environ 5 700 px à 390 px de large, avant les derniers ajustements de hauteur de l’offre.
+- Deux publications sociales sur l’accueil ; quatre sur la page Tribu et une après filtrage sur Paris.
+- Suivi d’un couple conservé après rechargement, likes persistants, favoris et conseils publiés.
+- Publication depuis l’accueil visible dans le fil ; messages privés conservés séparément.
+- Actions, direction artistique, témoins, planning EVG / EVJF, discours, filtrage des offres et assistant de démonstration vérifiés.
+- Compilation de production et TypeScript réussis. Tests fonctionnels terminés avec le code de sortie 0 et aucune erreur JavaScript.
+- Après les derniers ajustements visuels, contrôle distinct aux largeurs 320, 390, 430, 768 et 1440 px : aucun débordement horizontal, aucune mention d’offre coupée, aucun chevauchement des commandes de la prochaine action. Selfie local et captures de la présentation finale vérifiés. Programme terminé avec le code de sortie 0, sans erreur JavaScript.

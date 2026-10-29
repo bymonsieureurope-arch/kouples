@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import {
   Home,
   Heart,
@@ -68,8 +69,8 @@ function Logo() {
   return (
     <img
       className="brand-image"
-      src="/kouple-logo.png"
-      alt="Kouple. — logo de Kouples"
+      src="/kouples-logo.png"
+      alt="Kouples."
       width={2172}
       height={724}
     />
@@ -385,179 +386,263 @@ export default function App() {
       </button>
     </div>
   );
-  const TribeCards = () => (
+  const TribeCards = ({ limit = 4 }: { limit?: number }) => (
     <div className="tribe-cards">
-      {couples.map((couple, index) => {
-        const liked = (data.tribeLikes || []).includes(couple.name),
-          saved = (data.savedCouples || []).includes(couple.name),
-          comments = data.tribeComments?.[couple.name] || [];
-        return (
-          <article className="couple-card" key={couple.name}>
-            <button
-              className="couple-card-photo"
-              aria-label={"Discuter avec " + couple.name}
-              onClick={() => setModal("discussion:" + couple.name)}
-            >
-              <Photo src={couple.img} alt={couple.name} loading="lazy" />
-            </button>
-            <div className="couple-card-body">
-              <h3>{couple.name}</h3>
-              <p className="couple-card-meta">
-                {couple.month} · {couple.city}
-              </p>
-              <button
-                className="couple-story"
-                onClick={() => setModal("tribe:" + couple.name)}
-              >
-                {coupleStories[index].text}
-              </button>
-              <div className="couple-card-actions">
+      {couples
+        .map((couple, index) => ({ couple, index }))
+        .filter(
+          ({ couple }) =>
+            tab !== "Tribu" ||
+            ((city === "Toutes les villes" || couple.city === city) &&
+              (month === "Toutes les périodes" || couple.month === month)),
+        )
+        .slice(0, limit)
+        .map(({ couple, index }) => {
+          const liked = (data.tribeLikes || []).includes(couple.name),
+            saved = (data.savedCouples || []).includes(couple.name),
+            comments = data.tribeComments?.[couple.name] || [];
+          return (
+            <article className="couple-card" key={couple.name}>
+              <div className="couple-card-header">
+                <Photo src={couple.img} alt="" loading="lazy" />
+                <div>
+                  <h3>{couple.name}</h3>
+                  <p>
+                    {couple.month} · {couple.city}
+                  </p>
+                </div>
                 <button
+                  className={
+                    (data.followingCouples || []).includes(couple.name)
+                      ? "is-following"
+                      : ""
+                  }
                   aria-label={
-                    (liked ? "Ne plus aimer" : "Aimer") +
-                    " la publication de " +
-                    couple.name
+                    ((data.followingCouples || []).includes(couple.name)
+                      ? "Ne plus suivre "
+                      : "Suivre ") + couple.name
                   }
-                  aria-pressed={liked}
-                  className={liked ? "liked" : ""}
+                  aria-pressed={(data.followingCouples || []).includes(
+                    couple.name,
+                  )}
                   onClick={() =>
                     update({
-                      tribeLikes: liked
-                        ? (data.tribeLikes || []).filter(
+                      followingCouples: (data.followingCouples || []).includes(
+                        couple.name,
+                      )
+                        ? (data.followingCouples || []).filter(
                             (name) => name !== couple.name,
                           )
-                        : [...(data.tribeLikes || []), couple.name],
+                        : [...(data.followingCouples || []), couple.name],
                     })
                   }
                 >
-                  <Heart size={17} fill={liked ? "currentColor" : "none"} />
-                  {coupleStories[index].likes + (liked ? 1 : 0)}
-                </button>
-                <button
-                  aria-label={"Commenter la publication de " + couple.name}
-                  onClick={() => setModal("tribe:" + couple.name)}
-                >
-                  <MessageCircle size={17} />
-                  {comments.length}
-                </button>
-                <button
-                  className={saved ? "saved" : ""}
-                  aria-label={"Sauvegarder le couple " + couple.name}
-                  aria-pressed={saved}
-                  onClick={() =>
-                    update({
-                      savedCouples: saved
-                        ? (data.savedCouples || []).filter(
-                            (name) => name !== couple.name,
-                          )
-                        : [...(data.savedCouples || []), couple.name],
-                    })
-                  }
-                >
-                  <Bookmark size={16} fill={saved ? "currentColor" : "none"} />
+                  {(data.followingCouples || []).includes(couple.name) ? (
+                    <>
+                      <Check size={14} />
+                      Suivi
+                    </>
+                  ) : (
+                    <>
+                      <Plus size={14} />
+                      Suivre
+                    </>
+                  )}
                 </button>
               </div>
-            </div>
-          </article>
-        );
-      })}
+              <button
+                className="couple-card-photo"
+                aria-label={"Voir la publication de " + couple.name}
+                onClick={() => setModal("tribe:" + couple.name)}
+              >
+                <Photo src={couple.img} alt={couple.name} loading="lazy" />
+              </button>
+              <div className="couple-card-body">
+                <span className="discussion-topic">ON AIMERAIT VOTRE AVIS</span>
+                <button
+                  className="couple-story"
+                  onClick={() => setModal("tribe:" + couple.name)}
+                >
+                  {coupleStories[index].text}
+                </button>
+                <div className="couple-card-actions">
+                  <button
+                    aria-label={
+                      (liked ? "Ne plus aimer" : "Aimer") +
+                      " la publication de " +
+                      couple.name
+                    }
+                    aria-pressed={liked}
+                    className={liked ? "liked" : ""}
+                    onClick={() =>
+                      update({
+                        tribeLikes: liked
+                          ? (data.tribeLikes || []).filter(
+                              (name) => name !== couple.name,
+                            )
+                          : [...(data.tribeLikes || []), couple.name],
+                      })
+                    }
+                  >
+                    <Heart size={17} fill={liked ? "currentColor" : "none"} />
+                    <span>
+                      J’aime{" "}
+                      <small>
+                        {coupleStories[index].likes + (liked ? 1 : 0)}
+                      </small>
+                    </span>
+                  </button>
+                  <button
+                    aria-label={"Commenter la publication de " + couple.name}
+                    onClick={() => setModal("tribe:" + couple.name)}
+                  >
+                    <MessageCircle size={17} />
+                    <span>
+                      Commenter <small>{comments.length}</small>
+                    </span>
+                  </button>
+                  <button
+                    className={saved ? "saved" : ""}
+                    aria-label={"Sauvegarder le couple " + couple.name}
+                    aria-pressed={saved}
+                    onClick={() =>
+                      update({
+                        savedCouples: saved
+                          ? (data.savedCouples || []).filter(
+                              (name) => name !== couple.name,
+                            )
+                          : [...(data.savedCouples || []), couple.name],
+                      })
+                    }
+                  >
+                    <Bookmark
+                      size={16}
+                      fill={saved ? "currentColor" : "none"}
+                    />
+                    <span>{saved ? "Gardé" : "Garder"}</span>
+                  </button>
+                </div>
+                <button
+                  className="join-conversation"
+                  onClick={() => setModal("tribe:" + couple.name)}
+                >
+                  Partager un conseil <ArrowRight size={18} />
+                </button>
+                <button
+                  className="couple-direct"
+                  onClick={() => setModal("discussion:" + couple.name)}
+                >
+                  Leur envoyer un message <Send size={14} />
+                </button>
+              </div>
+            </article>
+          );
+        })}
     </div>
   );
-  const Feed = () => (
+  const Feed = ({ recentOnly = false }: { recentOnly?: boolean }) => (
     <div className="feed">
-      {data.posts.map((p) => (
-        <article
-          className={"post " + (p.id === 1 ? "featured-post" : "")}
-          key={p.id}
-        >
-          <div className="post-author">
-            <Photo
-              className="avatar"
-              src={p.id === 1 ? couples[0].img : pictures.sarah}
-              alt=""
-            />
-            <div>
-              <b>{p.author}</b>
-              <small>
-                {p.id === 1
-                  ? "Juin 2027 · Paris"
-                  : "Dans la tribu · Démonstration"}
-              </small>
-            </div>
-            <Leaf size={19} />
-          </div>
-          <p>{p.text}</p>
-          {p.id === 1 && (
-            <button
-              className="post-gallery"
-              aria-label="Voir les inspirations de la discussion"
-              onClick={() => setModal("comment:" + p.id)}
-            >
-              <Photo src={pictures.dinner} alt="Inspiration dîner de mariage" />
-              <Photo src={pictures.venue} alt="Inspiration lieu de réception" />
-              <span>+3</span>
-            </button>
-          )}
-          <div className="post-actions">
-            <button
-              onClick={() =>
-                update({
-                  posts: data.posts.map((x) =>
-                    x.id === p.id
-                      ? {
-                          ...x,
-                          liked: !x.liked,
-                          likes: x.likes + (x.liked ? -1 : 1),
-                        }
-                      : x,
-                  ),
-                })
-              }
-            >
-              <Heart size={17} fill={p.liked ? "currentColor" : "none"} />
-              {p.likes}
-            </button>
-            <button onClick={() => setModal("comment:" + p.id)}>
-              <MessageCircle size={17} />
-              <span>{p.comments.length}</span>
-              <span className="sr-only">
-                {" "}
-                commentaire{p.comments.length > 1 ? "s" : ""}
-              </span>
-            </button>
-            <button
-              aria-label="Sauvegarder cette publication"
-              className={
-                (data.savedPosts || []).includes(p.id) ? "saved-post" : ""
-              }
-              onClick={() =>
-                update({
-                  savedPosts: (data.savedPosts || []).includes(p.id)
-                    ? (data.savedPosts || []).filter((id) => id !== p.id)
-                    : [...(data.savedPosts || []), p.id],
-                })
-              }
-            >
-              <Bookmark
-                size={18}
-                fill={
-                  (data.savedPosts || []).includes(p.id)
-                    ? "currentColor"
-                    : "none"
-                }
+      {data.posts
+        .filter((post) => !recentOnly || post.id !== 1)
+        .map((p) => (
+          <article
+            className={"post " + (p.id === 1 ? "featured-post" : "")}
+            key={p.id}
+          >
+            <div className="post-author">
+              <Photo
+                className="avatar"
+                src={p.id === 1 ? couples[0].img : pictures.sarah}
+                alt=""
               />
-            </button>
-            <button onClick={() => setModal("comment:" + p.id)}>
-              Rejoindre la discussion <ArrowRight size={16} />
-            </button>
-          </div>
-          {p.comments.map((c, i) => (
-            <p className="comment" key={i}>
-              {c}
-            </p>
-          ))}
-        </article>
-      ))}
+              <div>
+                <b>{p.author}</b>
+                <small>
+                  {p.id === 1
+                    ? "Juin 2027 · Paris"
+                    : "Dans la tribu · Démonstration"}
+                </small>
+              </div>
+              <Leaf size={19} />
+            </div>
+            <p>{p.text}</p>
+            {p.id === 1 && (
+              <button
+                className="post-gallery"
+                aria-label="Voir les inspirations de la discussion"
+                onClick={() => setModal("comment:" + p.id)}
+              >
+                <Photo
+                  src={pictures.dinner}
+                  alt="Inspiration dîner de mariage"
+                />
+                <Photo
+                  src={pictures.venue}
+                  alt="Inspiration lieu de réception"
+                />
+                <span>+3</span>
+              </button>
+            )}
+            <div className="post-actions">
+              <button
+                onClick={() =>
+                  update({
+                    posts: data.posts.map((x) =>
+                      x.id === p.id
+                        ? {
+                            ...x,
+                            liked: !x.liked,
+                            likes: x.likes + (x.liked ? -1 : 1),
+                          }
+                        : x,
+                    ),
+                  })
+                }
+              >
+                <Heart size={17} fill={p.liked ? "currentColor" : "none"} />
+                {p.likes}
+              </button>
+              <button onClick={() => setModal("comment:" + p.id)}>
+                <MessageCircle size={17} />
+                <span>{p.comments.length}</span>
+                <span className="sr-only">
+                  {" "}
+                  commentaire{p.comments.length > 1 ? "s" : ""}
+                </span>
+              </button>
+              <button
+                aria-label="Sauvegarder cette publication"
+                className={
+                  (data.savedPosts || []).includes(p.id) ? "saved-post" : ""
+                }
+                onClick={() =>
+                  update({
+                    savedPosts: (data.savedPosts || []).includes(p.id)
+                      ? (data.savedPosts || []).filter((id) => id !== p.id)
+                      : [...(data.savedPosts || []), p.id],
+                  })
+                }
+              >
+                <Bookmark
+                  size={18}
+                  fill={
+                    (data.savedPosts || []).includes(p.id)
+                      ? "currentColor"
+                      : "none"
+                  }
+                />
+              </button>
+              <button onClick={() => setModal("comment:" + p.id)}>
+                Rejoindre la discussion <ArrowRight size={16} />
+              </button>
+            </div>
+            {p.comments.map((c, i) => (
+              <p className="comment" key={i}>
+                {c}
+              </p>
+            ))}
+          </article>
+        ))}
     </div>
   );
   return (
@@ -680,9 +765,12 @@ export default function App() {
           {tab === "Accueil" && (
             <>
               <section className="hero">
-                <Photo
-                  src={pictures.hero}
-                  alt="Un couple de mariés partage un instant de bonheur"
+                <Image
+                  src={pictures.selfie}
+                  alt="Selfie spontané d’un couple en promenade — illustration de démonstration"
+                  fill
+                  sizes="(max-width: 760px) 100vw, 1100px"
+                  priority
                 />
                 <div className="hero-shade" />
                 <div className="hero-top">
@@ -777,6 +865,7 @@ export default function App() {
                     aria-label="Voir l’action alliances"
                     onClick={() => setModal("action")}
                   >
+                    <span>Voir l’action</span>
                     <ArrowRight />
                   </button>
                 </div>
@@ -791,7 +880,32 @@ export default function App() {
                   </button>
                 }
               >
-                <TribeCards />
+                <p className="tribe-intro">
+                  Les mêmes questions, les mêmes petits bonheurs. Faites
+                  connaissance avec les couples qui vivent la même aventure.
+                </p>
+                <div className="tribe-composer">
+                  <Photo src={pictures.sarah} alt="" />
+                  <button
+                    className="composer-prompt"
+                    onClick={() => setModal("post")}
+                  >
+                    Une question, une idée à partager ?
+                    <span>La tribu est là pour vous.</span>
+                  </button>
+                  <button
+                    className="compose-button"
+                    onClick={() => setModal("post")}
+                  >
+                    <Plus size={18} />
+                    Publier
+                  </button>
+                </div>
+                <Feed recentOnly />
+                <TribeCards limit={2} />
+                <button className="tribe-more" onClick={() => go("Tribu")}>
+                  Voir toutes les discussions <ArrowRight size={18} />
+                </button>
               </Section>
               <Section
                 title="Prestataires"
@@ -1244,6 +1358,12 @@ export default function App() {
                     </button>
                   </div>
                 ))}
+              </Section>
+              <Section
+                title="Les discussions du moment"
+                className="tribe-section"
+              >
+                <TribeCards />
               </Section>
               <Section
                 title="Les nouvelles de la tribu"

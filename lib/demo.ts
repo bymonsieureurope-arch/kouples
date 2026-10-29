@@ -1,6 +1,7 @@
 const photo = (id: string, w = 1000) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=85`;
 export const pictures = {
+  selfie: "/couple-selfie.png",
   hero: photo("photo-1511285560929-80b456fea0bc", 1800),
   sarah: photo("photo-1534528741775-53994a69daeb", 300),
   julien: photo("photo-1500648767791-00dcc994a43e", 300),
@@ -177,6 +178,7 @@ type Post = {
   comments: string[];
 };
 export type Data = {
+  followingCouples: string[];
   tribeLikes: string[];
   savedCouples: string[];
   tribeComments: Record<string, string[]>;
@@ -203,6 +205,7 @@ export type Data = {
   chat: { role: string; text: string }[];
 };
 export const initial: Data = {
+  followingCouples: [],
   tribeLikes: [],
   savedCouples: [],
   tribeComments: {},
